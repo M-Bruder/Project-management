@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 var TaskSchema = mongoose.Schema({
     id: { type: Number, unique: true },
     name: {type: String, index: true},
-    star: { type: Date },
+    start: { type: Date },
 	end: { type: Date },
 	color: { type: String }
     /*links: [{

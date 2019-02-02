@@ -10,7 +10,6 @@
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "keywords": [],
-  "proxy": "http://localhost:8080",
   "author": "",
   "license": "ISC",
   "devDependencies": {

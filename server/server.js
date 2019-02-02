@@ -7,8 +7,9 @@ const passport = require('passport');
 const logger = require('morgan');
 const cors = require('cors');
 
-const auth = require('./routes/auth');
+const user = require('./routes/user');
 const post = require('./routes/post');
+const task = require('./routes/task');
 
 const app = express();
 
@@ -27,8 +28,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({'extended':'true'}));
 app.use(express.static(path.join(__dirname, 'build')));
 
-app.use('/api/auth', auth);
-app.use('/posts', post);
+app.use('/api/auth', user);
+app.use('/api/posts', post);
+app.use('/api/tasks', task);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
