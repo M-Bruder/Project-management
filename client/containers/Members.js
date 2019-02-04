@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { Button, Collapse, Container, Table, ButtonGroup, Badge } from 'reactstrap';
 import { Link, withRouter } from 'react-router-dom';
-import { FormGroup,ControlLabel,FormControl } from 'react-bootstrap';
 
-class TaskTable extends Component {
+class Members extends Component {
     constructor(props) {
         super(props);
         this.toggle = this.toggle.bind(this);
@@ -52,4 +51,4 @@ class TaskTable extends Component {
 }
 }
 
-export default TaskTable;
+export default Members;

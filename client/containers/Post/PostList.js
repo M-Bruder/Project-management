@@ -6,9 +6,10 @@ import { deletePost, fetchAllPosts } from '../../actions';
 function PostList({ posts, onDelete, onLoadProject }) {
   if(!posts.length) {
     var user = localStorage.getItem('user');
+    onLoadProject(user);
     return (
       <div>
-        <h1 onLoadProject = { onLoadProject(user) } >No Posts</h1>
+        <h1 >No Posts</h1>
       </div>
     )
   }

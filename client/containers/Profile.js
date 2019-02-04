@@ -51,7 +51,6 @@ class Profile extends Component {
   }
 
   updateProfile = () => { 
-    var self = this;
     axios.post('http://localhost:5000/api/auth/updateProfile', {
       username: this.state.username,
       password: this.state.password
@@ -79,7 +78,7 @@ class Profile extends Component {
                 <input value={this.state.username} type="text" onChange={this.handleNameChange} className="form-control" placeholder="Username" name="username" required />
               </div>
               <div className="form-group">
-                <input value={this.state.password} type="password" onChange={this.handlePasswordChange} className="form-control" placeholder="Password" name="password" required />
+                <input value={this.state.password} type="password" onChange={this.handlePasswordChange} className="form-control" placeholder="Password" name="password"/>
               </div>
               
               <button type="button" onClick={this.updateProfile} id="submit" name="submit" className="btn btn-primary pull-right">Update</button>

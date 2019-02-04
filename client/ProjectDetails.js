@@ -13,16 +13,10 @@ class ProjectDetails extends Component {
     return(
        <div>
          <Container>
-         <Row>
-          <Col xs="3">
-            <NewTask />
-            <TaskTable />
-          </Col>
-          </Row>
           <Row>
-          <Col xs="auto">
-            <Ganttreact />
-          </Col>
+            <Col xs="auto">
+              <Ganttreact />
+            </Col>
           </Row>
         </Container>
       </div>

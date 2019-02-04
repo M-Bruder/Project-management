@@ -1,27 +1,38 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardText, CardBody,
-  CardTitle, CardSubtitle, Button, ButtonGroup } from 'reactstrap';
+  CardTitle, CardSubtitle, Button, ButtonGroup, Row, Col, Form, FormGroup, Input } from 'reactstrap';
+import MemberList from '../../containers/Member/MemberList';
+import './Post.css';
 
 const styles = {
   borderBottom: '2px solid #eee',
   background: '#fafafa',
   margin: '.75rem auto',
   padding: '.6rem 1rem',
-  maxWidth: '500px',
-  borderRadius: '7px'
+  maxWidth: '900px',
+  borderRadius: '7px',
 };
 
 export default ({ post: { title, body, _id }, onDelete }) => {
   return (
     <div style={ styles }>
-      <h2>{ title }</h2>
-      <p>{ body }</p>
-      <ButtonGroup size="sm">
-          <Button color="primary" tag={Link} to={"/groups/" + _id}>Edytuj</Button>
-          <Button color="info" tag={Link} to={"/project/" + _id}>Szczegóły projektu</Button>
-          <Button color="danger" onClick={() => onDelete(_id)}>Usuń</Button>
-      </ButtonGroup>
+      <Row>
+        <Col>
+          <div className="post">
+            <h4><b>{ title }</b></h4>
+            <p>{ body }</p>
+            <ButtonGroup size="sm">
+                <Button color="primary" tag={Link} to={"/groups/" + _id}>Edytuj</Button>
+                <Button color="info" tag={Link} to={"/project/" + _id}>Szczegóły projektu</Button>
+                <Button color="danger" onClick={() => onDelete(_id)}>Usuń</Button>
+            </ButtonGroup>
+          </div>
+        </Col> 
+        <Col>
+          <MemberList />
+        </Col>
+      </Row>
     </div>
   );
   

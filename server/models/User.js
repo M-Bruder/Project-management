@@ -20,7 +20,14 @@ var UserSchema = new Schema({
 			type: Schema.Types.ObjectId,
 			ref: 'Post' 
 		}
-	]
+    ],
+    tasks: 
+	[
+		{ 
+			type: String,
+			ref: 'Task' 
+		}
+    ]
 });
 
 UserSchema.pre('save', function (next) {

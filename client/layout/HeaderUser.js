@@ -47,10 +47,13 @@ class Header extends React.Component {
             <Collapse isOpen={this.state.isOpen} navbar>
               <Nav className="ml-auto" navbar>
               <NavItem>
+                  <NavLink tag={Link}  to="/reduxgantt">Redux Gantt</NavLink>
+                </NavItem>
+              <NavItem>
                   <NavLink tag={Link}  to="/project">Projekty</NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink tag={Link}  to="/gantt">Gantt</NavLink>
+                  <NavLink tag={Link}  to="/group">Zarządzaj członkami projektu</NavLink>
                 </NavItem>
                 <NavItem>
                   <NavLink tag={Link}  to="/profile">Ustawienia konta</NavLink>

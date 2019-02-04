@@ -13,7 +13,7 @@ import Footer from './layout/Footer';
 import Login from './containers/Login';
 import Register from './containers/Register';
 import Profile from './containers/Profile';
-import Gantt from './containers/Gantt/Gantt';
+import Members from './containers/Members';
 
 import store from './store/Store'
 
@@ -30,7 +30,7 @@ const Root = () => (
             <Route exact path='/' component={Login} />
             <Route exact path='/register' component={Register} />
             <Route exact path='/profile' component={Profile} />
-            <Route exact path='/gantt' component={Gantt} />
+            <Route exact path='/group' component={Members} />
           </Switch>
         <Footer /> 
         </div>

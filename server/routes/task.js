@@ -3,20 +3,20 @@ const router = express.Router();
 
 const Task = require('../models/Task');
 
-
 // Defined store rout
 
 router.post('/add',function (req, res) {
   const task = new Task({
-    id: req.body.id,
+    idTask: req.body.idTask,
     name: req.body.name,
     start: req.body.start,
 	  end: req.body.end,
-    color: req.body.color
+    color: req.body.color,
+    user: req.body.user
   });
 
   task.save()
-    .then(post => {
+    .then(task => {
     res.status(200).json(task);
     })
     .catch(err => {
@@ -26,7 +26,7 @@ router.post('/add',function (req, res) {
 
 
 router.post('/getTask', function (req, res) {
-  Task.find({project : req.body.project})
+  Task.find({user : req.body.user})
    .populate('task').exec(function (err, tasks){
   if(err){
     console.log(err);
@@ -45,5 +45,23 @@ router.get('/delete/:id', function (req, res) {
         else res.json(req.params.id);
     });
 });
+
+router.put('/update/:id', function (req, res) {
+  const doc = {
+    name: req.body.name,
+    start: req.body.start,
+    end: req.body.end
+};
+console.log(doc);
+  Task.updateOne({_id: req.params.id}, {$set: doc }, function(err, task){
+    if(err){
+      res.send(err);
+    }
+    else {
+      res.json(task);
+    }
+  });
+});
+
 
 module.exports = router;
