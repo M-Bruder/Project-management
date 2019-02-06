@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 // Define collection and schema for Post
-var PostSchema = new Schema({
+var ProjectSchema = new Schema({
   title: {
     type: String
   },
@@ -14,11 +14,17 @@ var PostSchema = new Schema({
 			type: String,
 			ref: 'User' 
 		}
+	],
+	members: 	[
+		{ 
+			type: String,
+			ref: 'Member' 
+		}
 	]
 });
 
-var Post = mongoose.model('Post', PostSchema);
-module.exports = Post;
+var Project = mongoose.model('Project', ProjectSchema);
+module.exports = Project;
 
 module.exports.getPostByUser = function(user, callback){
 	var query = {user: user};

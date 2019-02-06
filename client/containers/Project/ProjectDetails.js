@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
-import './styles/ProjectDetails.css';
+import '../../styles/ProjectDetails.css';
 import { Row, Col, Container } from 'reactstrap';
 import { Link, withRouter } from 'react-router-dom';
-import TaskTable from './components/ProjectDetails/TaskTable';
-import NewTask from './components/ProjectDetails/NewTask';
-//import Gantt from './containers/Gantt/Gantt2';
-import Ganttreact from './containers/Gantt/Gantt';
+import Gantt from '../../components/Gantt/Gantt';
 
 
 class ProjectDetails extends Component {
@@ -15,7 +12,7 @@ class ProjectDetails extends Component {
          <Container>
           <Row>
             <Col xs="auto">
-              <Ganttreact />
+              <Gantt />
             </Col>
           </Row>
         </Container>

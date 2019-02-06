@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
-import CreatePost from './containers/Post/CreatePost';
-import PostList from './containers/Post/PostList';
+import CreateProject from './Project/CreateProject';
+import ProjectList from './Project/ProjectList';
 import { Button, Collapse, Row, Col } from 'reactstrap';
-import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
-
 const stylesApp = {
   marginTop: 40
 }
@@ -25,12 +23,12 @@ class App extends Component {
         <div style={ stylesApp }>
         <Button color="primary" onClick={this.toggle} style={{ marginBottom: '1rem' }}>Stwórz nowy projekt</Button>
         <Row>
-          <Col>  
+          <Col> 
             <Collapse isOpen={this.state.collapse}>
-              <CreatePost />
+              <CreateProject />
             </Collapse>
-            <PostList />
-          </Col>
+            <ProjectList />
+          </Col> 
         </Row>
         </div>
       </div>

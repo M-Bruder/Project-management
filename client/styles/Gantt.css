@@ -131,6 +131,7 @@ html {
 }
 
 .operation-button-container {
+  margin: 5px;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -147,3 +148,4 @@ html {
   border-top-right-radius: 17px;
   border-bottom-right-radius: 17px;
 }
+

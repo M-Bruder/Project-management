@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import { Button } from 'reactstrap';
 import TimeLine from "react-gantt-timeline";
 import '../../styles/Gantt.css';
-import NewTask from '../../components/ProjectDetails/NewTask';
+import NewTask from '../ProjectDetails/NewTask';
 import axios from 'axios';
-import { isNull } from "util";
+
 
 const config = {
   header: {
@@ -107,10 +107,12 @@ class Gantt extends Component {
     this.state = {user: localStorage.getItem('user'), fromChild: [], idTask: '', data: [], links: [], selectedItem: null, timelineMode:"month" };
   }
 
-
   componentDidMount() {
+    console.log(window.location.hash);
+    console.log(window.location.hash.substr(10));//działa!
+    var post = window.location.hash.substr(10);
     const { user } = this.state;
-    axios.post(`http://localhost:5000/api/tasks/getTask`, { user }) 
+    axios.post(`http://localhost:5000/api/tasks/getTask`, { post }) 
       .then(res => {
         const data = res.data;
         this.setState({ data });
@@ -290,13 +292,13 @@ class Gantt extends Component {
   render() {
     return (
       <div className="app-container">
+      <div className="mode-container row mt-3">
+      
+        
         <NewTask id={ this.addID(this.state.data.length + 1) } handlerFromParant={this.handleData} />
-          <div className="operation-button-container">
-            <div className="mode-button mb-1 float-right">
-              <Button color="warning" onClick={this.addTask}>Dodaj zadanie</Button>
-              <Button color="danger" onClick={this.delete}>Usuń wybrany element</Button>
-            </div>
-            <div className="mode-container float-right">
+        <div className="operation-button-container">
+        <Button color="danger" onClick={this.delete}>Usuń wybrane zadanie</Button>
+            <div className="mode-container float-left">
             <div className="mode-container-item mode-container-item-left" 
                 onClick={(e)=>this.modeChange('month')}
                 style={this.getbuttonStyle('month')}>Miesiąc</div>
@@ -304,7 +306,8 @@ class Gantt extends Component {
                 onClick={(e)=>this.modeChange('year')}
                 style={this.getbuttonStyle('year')}>Rok</div>
             </div>
-          </div>
+        </div>
+        </div>
         <div className="time-line-container">
           <TimeLine
             data={this.state.data}
@@ -322,5 +325,6 @@ class Gantt extends Component {
   }
 }
 
-  
+//<Button color="warning" onClick={this.addTask}>Dodaj zadanie</Button>
+
 export default Gantt;

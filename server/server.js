@@ -8,7 +8,8 @@ const logger = require('morgan');
 const cors = require('cors');
 
 const user = require('./routes/user');
-const post = require('./routes/post');
+const project = require('./routes/project');
+const member = require('./routes/member');
 const task = require('./routes/task');
 
 const app = express();
@@ -18,7 +19,7 @@ app.use(cors());
 mongoose.Promise = require('bluebird');
 //connect to MongoDB
 mongoose
-    .connect('mongodb://localhost/ReactProjectManagementSystemq',
+    .connect('mongodb://localhost/ProjectManagementSystem',
     { useCreateIndex: true, useNewUrlParser: true, promiseLibrary: require('bluebird')})
     .then(() => console.log("Connection Succeeded"))
     .catch(err => console.log(err));
@@ -29,8 +30,9 @@ app.use(bodyParser.urlencoded({'extended':'true'}));
 app.use(express.static(path.join(__dirname, 'build')));
 
 app.use('/api/auth', user);
-app.use('/api/posts', post);
+app.use('/api/projects', project);
 app.use('/api/tasks', task);
+app.use('/api/members', member);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { Col, FormGroup, Container, Button, Collapse, Label, Input, Card, CardBody, Form, Row } from 'reactstrap';
 import { InputGroup, InputGroupText, InputGroupAddon } from 'reactstrap';
-import '../../styles/NewTask.css'
 
 
 class NewTask extends Component {
@@ -73,14 +72,15 @@ class NewTask extends Component {
         e.preventDefault();
         
         this.sendData();
-
+        var post = window.location.hash.substr(10)
         axios.post('http://localhost:5000/api/tasks/add', { 
         idTask: this.props.id,
         name: this.checkName(this.state.name),
         start: this.checkStart(this.state.start),
         end: this.checkEnd(this.state.end),
         color: this.state.color,
-        user: this.state.user })
+        user: this.state.user,
+        post: post})
           .then((result) => {
             console.log(result);
           });

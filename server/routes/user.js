@@ -9,22 +9,64 @@ var User = require("../models/user");
 
 
 router.post('/register', function(req, res) {
+  var name = req.body.name;
+  var surname = req.body.surname;
+  var email = req.body.email;
+  var username = req.body.username;
+  var password = req.body.password;
+  var passwordConfirm = req.body.passwordConfirm;
+
+
+
+ User.findOne({ username: { 
+    "$regex": "^" + username + "\\b", "$options": "i"
+}}, function (err, user) {
+    User.findOne({ email: { 
+      "$regex": "^" + email + "\\b", "$options": "i"
+  }}, function (err, mail) {
+      if (user || mail) {
+        res.status(401).send({success: false, msg: 'Username already exists.'});
+      }
+      else {
+        var newUser = new User({
+          _id: req.body_id,
+          name: req.body.name,
+          surname: req.body.surname,
+          email: req.body.email,
+          username: req.body.username,
+          password: req.body.password
+        });
+        // save the user
+        newUser.save(function(err) {
+          if (err) {
+            return res.status(401).send({success: false, msg: 'Username already exists.'});
+          }
+          res.json({success: true, msg: 'Successful created new user.'});
+        });
+      }
+    });
+  });
+/*
   if (!req.body.username || !req.body.password) {
-    res.json({success: false, msg: 'Please pass username and password.'});
+    res.status(401).json({success: false, msg: 'Please pass username and password.'});
   } else {
     var newUser = new User({
       _id: req.body_id,
+      name: req.body.name,
+      surname: req.body.surname,
+      email: req.body.email,
       username: req.body.username,
       password: req.body.password
     });
     // save the user
     newUser.save(function(err) {
       if (err) {
-        return res.json({success: false, msg: 'Username already exists.'});
+        return res.status(401).send({success: false, msg: 'Username already exists.'});
       }
       res.json({success: true, msg: 'Successful created new user.'});
     });
   }
+  */
 }); 
 
 router.post('/login', function(req, res) {
@@ -40,10 +82,12 @@ router.post('/login', function(req, res) {
       user.comparePassword(req.body.password, function (err, isMatch) {
         if (isMatch && !err) {
           // if user is found and password is right create a token
-          var token = jwt.sign(user.toJSON(), settings.secret);
+          //var token = user.toJSON(), settings.secret);
+          var token = user;
           var userid = user._id;
           console.log(userid);
-          res.json({success: true, token: 'JWT ' + token});
+          //res.json({success: true, token: 'JWT ' + token});
+          res.json({success: true, token: 'JWT' + token});
         } else {
           res.status(401).send({success: false, msg: 'Authentication failed. Wrong password.'});
         }
@@ -73,9 +117,14 @@ router.post('/logout', (req, res) => {
 
 router.post('/getProfile', function(req,res){
   var username = req.body.username;
-  User.getUserByUsernameorEmail(username, function(err, result){
-    if (err) throw err;
-    res.send(result)
+  User.findOne({ username: req.body.username }, function(err, result){
+    if(err){
+      console.log(err);
+    }
+    else {
+      res.json(result);
+      console.log(result);
+    }
   })
 })
 

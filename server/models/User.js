@@ -1,34 +1,31 @@
-const Post = require('./Post');
+const Project = require('./Project');
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var bcrypt = require('bcrypt-nodejs');
 
 
 var UserSchema = new Schema({
-  username: {
-        type: String,
-        unique: true,
-        required: true
-    },
-  password: {
-        type: String,
-        required: true
-    },
-    posts: 
+    name: {type: String, required: true},
+    surname: {type: String, required: true},
+    email: {type: String, unique: true, required: true, index: true},
+	username: {type: String, unique: true, required: true, index: true},
+	password: {type: String, required: true},
+    projects: 
 	[
 		{ 
 			type: Schema.Types.ObjectId,
-			ref: 'Post' 
+			ref: 'Project' 
 		}
     ],
     tasks: 
 	[
-		{ 
+        { 
 			type: String,
 			ref: 'Task' 
 		}
-    ]
-});
+	]},
+	{timestamps: true});
+
 
 UserSchema.pre('save', function (next) {
     var user = this;

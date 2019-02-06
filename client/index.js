@@ -6,10 +6,11 @@ import './styles/index.css';
 import 'bootstrap';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 //import '../node_modules/bootstrap/dist/css/bootstrap.css';
-import ProjectList from './Project';
-import ProjectDetails from './ProjectDetails'
-import Header from './layout/HeaderUser';
-import Footer from './layout/Footer';
+
+import Header from './components/Patials/Header';
+import Footer from './components/Patials/Footer';
+import Project from './containers/Project';
+import ProjectDetails from './containers/Project/ProjectDetails'
 import Login from './containers/Login';
 import Register from './containers/Register';
 import Profile from './containers/Profile';
@@ -25,7 +26,7 @@ const Root = () => (
       <div className="App">
         <Header />
           <Switch>
-            <Route exact path='/project' component={ProjectList}/>
+            <Route exact path='/project' component={Project}/>
             <Route path='/project/:id' component={ProjectDetails}/>
             <Route exact path='/' component={Login} />
             <Route exact path='/register' component={Register} />

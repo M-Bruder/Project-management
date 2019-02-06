@@ -1,0 +1,18 @@
+
+li .list-group-item {
+    width: 300px;
+    margin: 5px auto;
+}
+
+li button {
+
+    margin-bottom: 10px;
+}
+
+.content {
+    margin-left: 10px;
+}
+
+.addMember {
+    margin-top: 10px;
+}

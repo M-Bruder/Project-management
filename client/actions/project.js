@@ -1,13 +1,13 @@
-import { ADD_POST, DELETE_POST, FETCH_POST } from './types';
+import { ADD_PROJECT, DELETE_PROJECT, FETCH_PROJECT } from './types';
 import axios from 'axios';
 
-const apiUrl = 'http://localhost:5000/api/posts';
+const apiUrl = 'http://localhost:5000/api/projects';
 
-export const createPost = ({ title, body, user }) => {
+export const createProject = ({ title, body, user }) => {
   return (dispatch) => {
     return axios.post(`${apiUrl}/add`, {title, body, user})
       .then(res => {
-        dispatch(createPostSuccess(res.data))
+        dispatch(createProjectSuccess(res.data))
         console.log(res.data);
       })
       .catch(error => {
@@ -16,9 +16,9 @@ export const createPost = ({ title, body, user }) => {
   };
 };
 
-export const createPostSuccess =  (data) => {
+export const createProjectSuccess =  (data) => {
   return {
-    type: ADD_POST,
+    type: ADD_PROJECT,
     payload: {
       _id: data._id,
       title: data.title,
@@ -28,20 +28,20 @@ export const createPostSuccess =  (data) => {
   }
 };
 
-export const deletePostSuccess = id => {
+export const deleteProjectSuccess = id => {
   return {
-    type: DELETE_POST,
+    type: DELETE_PROJECT,
     payload: {
       id
     }
   }
 }
 
-export const deletePost = id => {
+export const deleteProject = id => {
   return (dispatch) => {
     return axios.get(`${apiUrl}/delete/${id}`)
       .then(response => {
-        dispatch(deletePostSuccess(response.data))
+        dispatch(deleteProjectSuccess(response.data))
       })
       .catch(error => {
         throw(error);
@@ -50,20 +50,20 @@ export const deletePost = id => {
 };
 
 
-export const EditPostSuccess = id => {
+export const EditProjectSuccess = id => {
   return {
-    type: EDIT_POST,
+    type: EDIT_PROJECT,
     payload: {
       id
     }
   }
 }
 
-export const editPost = id => {
+export const editProject = id => {
   return (dispatch) => {
     return axios.get(`${apiUrl}/edit/${id}`)
       .then(response => {
-        dispatch(editPostSuccess(response.data))
+        dispatch(editProjectSuccess(response.data))
       })
       .catch(error => {
         throw(error);
@@ -71,20 +71,19 @@ export const editPost = id => {
   };
 };
 
-export const fetchPosts = (posts) => {
+export const fetchProjects = (posts) => {
   return {
-    type: FETCH_POST,
+    type: FETCH_PROJECT,
     posts
   }
 };
 
 
-export const fetchAllPosts = (user) => {
+export const fetchAllProjects = (user) => {
   return (dispatch) => {
-    return axios.post(`${apiUrl}/getPost`, { user })
+    return axios.post(`${apiUrl}/getProject`, { user })
       .then(res => {
-        console.log(user)
-        dispatch(fetchPosts(res.data))
+        dispatch(fetchProjects(res.data))
       })
       .catch(error => {
         throw(error);
@@ -94,12 +93,12 @@ export const fetchAllPosts = (user) => {
 
 
 /* 
-export const fetchAllPosts = (user) => {
+export const fetchAllProjects = (user) => {
   return (dispatch) => {
-    return axios.get(`${apiUrl}/getPost/${user}`, { user })
+    return axios.get(`${apiUrl}/getProject/${user}`, { user })
       .then(res => {
         console.log(user)
-        dispatch(fetchPosts(res.data))
+        dispatch(fetchProjects(res.data))
       })
       .catch(error => {
         throw(error);
@@ -109,18 +108,18 @@ export const fetchAllPosts = (user) => {
 
 */
 /*
-export const fetchPosts = (posts) => {
+export const fetchProjects = (posts) => {
   return {
-    type: FETCH_POST,
+    type: FETCH_PROJECT,
     posts
   }
 };
 
-export const fetchAllPosts = () => {
+export const fetchAllProjects = () => {
   return (dispatch) => {
-    return axios.get(`${apiUrl}/getPost`)
+    return axios.get(`${apiUrl}/getProject`)
       .then(res => {
-        dispatch(fetchPosts(res.data))
+        dispatch(fetchProjects(res.data))
       })
       .catch(error => {
         throw(error);

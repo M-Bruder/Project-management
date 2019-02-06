@@ -11,7 +11,6 @@ class Login extends Component {
       username: '',
       password: '',
       message: '',
-      isLoggedIn: false
     };
   }
   onChange = (e) => {
@@ -36,7 +35,7 @@ class Login extends Component {
       })
       .catch((error) => {
         if(error.response.status === 401) {
-          this.setState({ message: 'Login failed. Username or password not match' });
+          this.setState({ message: 'Błędna nazwa użytkownika lub hasło!' });
         }
       });
   }
@@ -50,23 +49,26 @@ class Login extends Component {
   render() {
     const { username, password, message } = this.state;
     return (
-      <div class="container">
-        <form class="form-signin" onSubmit={this.onSubmit}>
-          {message !== '' &&
-            <div class="alert alert-warning alert-dismissible" role="alert">
-              { message }
+      <div className="container">
+         <div className="signin">
+         {message !== '' &&
+              <div className="alert alert-danger alert-dismissible" role="alert">
+                { message }
+              </div>
+            }
+          <form className="form-signin" onSubmit={this.onSubmit}>
+            <h2 className="form-signin-heading">Zaloguj się</h2>
+            <p> Masz już konto? Wpisz swoje dane. </p>
+            <input  type="text" id="inputEmail" className="form-control" placeholder="Nazwa użytkownika lub adres e-mail" name="username" value={username} onChange={this.onChange} required/>
+            <input type="password" id="inputPassword" className="form-control" placeholder="Hasło" name="password" value={password} onChange={this.onChange} required/>
+            <button className="btn btn-lg btn-primary btn-block" type="submit">Zaloguj się</button>
+            <div className=".form-register">
+            <p>
+              Nie masz konta? <Link to="/register"><span className="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> Zarejestruj się!</Link>
+            </p>
             </div>
-          }
-          <h2 class="form-signin-heading">Please sign in</h2>
-          <label for="inputEmail" class="sr-only">Email address</label>
-          <input type="email" class="form-control" placeholder="Email address" name="username" value={username} onChange={this.onChange} required/>
-          <label for="inputPassword" class="sr-only">Password</label>
-          <input type="password" class="form-control" placeholder="Password" name="password" value={password} onChange={this.onChange} required/>
-          <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
-          <p>
-            Not a member? <Link to="/register"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> Register here</Link>
-          </p>
-        </form>
+          </form>
+        </div>
       </div>
     );
   }

@@ -12,6 +12,13 @@ var TaskSchema = mongoose.Schema({
 			type: String,
 			ref: 'User' 
 		}
+	],
+	project:  
+	[
+		{ 
+			type: String,
+			ref: 'Project' 
+		}
 	]
     /*links: [{
         start: { type: String },

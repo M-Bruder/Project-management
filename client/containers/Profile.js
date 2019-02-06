@@ -7,15 +7,19 @@ class Profile extends Component {
 
   constructor(props) {
     super(props);
-    this.handleNameChange = this.handleNameChange.bind(this);
-    this.handlePasswordChange = this.handlePasswordChange.bind(this);
+    this.onChange = this.onChange.bind(this)
     this.updateProfile = this.updateProfile.bind(this);
     this.getProfile = this.getProfile.bind(this);
     this.state = {
-      username: localStorage.getItem('user'),
-      password:'',
       id:'',
-      user: {}
+      user: {},
+      name:'',
+      surname: '',
+      username: localStorage.getItem('user'),
+      email: '',
+      password: '',
+      passwordConfirm: '',
+      message: ''
     };
   }
 
@@ -23,12 +27,12 @@ class Profile extends Component {
     this.getProfile();
   }
 
-  handleNameChange(e){
-    this.setState({username:e.target.value})
+  onChange = (e) => {
+    const state = this.state
+    state[e.target.name] = e.target.value;
+    this.setState(state);
   }
-  handlePasswordChange(e){
-    this.setState({password:e.target.value})
-  }
+
 
   logout = () => {
     localStorage.removeItem('jwtToken');
@@ -39,15 +43,15 @@ class Profile extends Component {
   getProfile = () => {
     var self = this;
     const { username } = this.state;
-    axios.post('http://localhost:5000/api/auth/getProfile', { username 
-    })
-    .then((result) =>  {
-      console.log(result);
-      self.setState({password: result.data.password});  
-    })
-    .catch((error) =>  {
-      console.log('error is ',error);
-    });
+      //self.setState({password: result.data.password});  
+
+    axios.post(`http://localhost:5000/api/auth/getProfile`, { username })
+      .then(res => {
+        console.log(res.data)
+      })
+      .catch(error => {
+        throw(error);
+      });
   }
 
   updateProfile = () => { 
@@ -69,21 +73,26 @@ class Profile extends Component {
 
   
   render() {
+    const {message} = this.state;
     return (
-      <div className="col-md-5">
-        <div className="form-area">  
-            <form role="form">
-              <br styles="clear:both" />
-              <div className="form-group">
-                <input value={this.state.username} type="text" onChange={this.handleNameChange} className="form-control" placeholder="Username" name="username" required />
-              </div>
-              <div className="form-group">
-                <input value={this.state.password} type="password" onChange={this.handlePasswordChange} className="form-control" placeholder="Password" name="password"/>
-              </div>
-              
-              <button type="button" onClick={this.updateProfile} id="submit" name="submit" className="btn btn-primary pull-right">Update</button>
-            </form>
-        </div>
+      <div className="container">
+        <div className="signin">
+          <form className="form-signin" onSubmit={this.onSubmit}>
+            {message !== '' &&
+                <div className="alert alert-warning alert-dismissible" role="alert">
+                  { message }
+                </div>
+            }
+            <h2 className="form-signin-heading">Twoje dane:</h2>
+            <input type="text" id="inputName" className="form-control" placeholder="Imię" name="name" value={this.state.name} onChange={this.onChange}/>
+            <input type="text"  id="inputSurname" className="form-control" placeholder="Nazwisko" name="surname" value={this.state.surname} onChange={this.onChange}/>
+            <input type="text"  id="inputUsername" className="form-control" placeholder="Nazwa użytkownika" name="username" value={this.state.username} onChange={this.onChange} required />
+            <input type="email" id="inputEmail" className="form-control" placeholder="Adres e-mail" name="email" value={this.state.email} onChange={this.onChange} required />
+            <input type="password" id="inputPassword" className="form-control" placeholder="Hasło" minlength="8" name="password" value={this.state.password} onChange={this.onChange}/>
+            <input type="password" id="inputPasswordConfirm" className="form-control" placeholder="Powtórz hasło" minlength="8" name="passwordConfirm" value={this.state.passwordConfirm} onChange={this.onChange}/>
+            <button className="btn btn-lg btn-primary btn-block" type="submit" onClick={this.updateProfile}>Zatwierdź zmiany</button>
+          </form>
+         </div>
       </div>
     );
   }
