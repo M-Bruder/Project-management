@@ -129,21 +129,30 @@ router.post('/getProfile', function(req,res){
 })
 
 router.post('/updateProfile', function(req, res){
+  var name = req.body.name;
+  var surname = req.body.surname;
+  var email = req.body.email;
   var username = req.body.username;
+  User.updateProfile(name, surname, email, username, function(result){
+    res.send(result);
+  })
+})
+
+router.post('/updatePassword', function(req, res){
   var password = req.body.password;
-  User.updateProfile(username, password, function(result){
+  User.updatePassword(password, function(result){
     res.send(result);
   })
 })
 
 router.get('/getPost', function (req, res) {
   User.findOne({ username: req.body.username })
-   .populate('post').exec(function (err, posts){
+   .populate('project').exec(function (err, projects){
   if(err){
     console.log(err);
   }
   else {
-    res.json(posts);
+    res.json(projects);
   }
 });
 });

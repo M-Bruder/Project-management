@@ -11,12 +11,13 @@ form {
 
 div.post {
     margin: 0 auto;
-    width: 60%;
+    width: 100%;
 }
-    
+
 div.member {
     margin: 0 auto;
     border-left: 3px solid rgb(71, 71, 71);
+    width: 100%;
     min-height: 170px;
 }
 

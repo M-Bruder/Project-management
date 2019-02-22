@@ -1,13 +1,17 @@
-import { ADD_PROJECT, DELETE_PROJECT, FETCH_PROJECT } from '../actions/types';
+import { ADD_PROJECT, DELETE_PROJECT, EDIT_PROJECT, FETCH_PROJECT } from '../actions/types';
 
-export default function postReducer(state = [], action) {
+export default function projectReducer(state = [], action) {
   switch (action.type) {
     case ADD_PROJECT:
       return [...state, action.payload];
+    case EDIT_PROJECT:
+      return [...state, action.payload];
+      //return state.filter(project => project._id !== action.payload.id);
+      //return state.map((project)=>project._id === action.payload.id ? {...project,editing:!project.editing}:project);
     case DELETE_PROJECT:
-      return state.filter(post => post._id !== action.payload.id);
+      return state.filter(project => project._id !== action.payload.id);
       case FETCH_PROJECT:
-      return action.posts;
+      return action.projects;
     default:
       return state;
   }

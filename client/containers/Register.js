@@ -53,7 +53,7 @@ class Register extends Component {
       <div className="container">
         <div className="signin">
         {message !== '' &&
-              <div className="alert alert-warning alert-dismissible" role="alert">
+              <div className="alert alert-danger alert-dismissible" role="alert">
                 { message }
               </div>
           }

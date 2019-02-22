@@ -10,20 +10,7 @@ var UserSchema = new Schema({
     email: {type: String, unique: true, required: true, index: true},
 	username: {type: String, unique: true, required: true, index: true},
 	password: {type: String, required: true},
-    projects: 
-	[
-		{ 
-			type: Schema.Types.ObjectId,
-			ref: 'Project' 
-		}
-    ],
-    tasks: 
-	[
-        { 
-			type: String,
-			ref: 'Task' 
-		}
-	]},
+    },
 	{timestamps: true});
 
 
@@ -81,7 +68,10 @@ module.exports.updateProfile = function(username, password, callback){
             { "email": username },
             { $set: 
                 { "username" : username,
-                  "password" : password 
+                  "password" : password,
+                  "name" : name,
+                  "surname": surname,
+                  "enail": email
                 }
             },function(err, result){
             if(err == null){

@@ -38,6 +38,22 @@ router.post('/getProject', function (req, res) {
 });
 });
 
+router.put('/update/:id', function (req, res) {
+  const doc = {
+    title: req.body.title,
+    body: req.body.body
+};
+console.log(doc);
+  Project.updateOne({_id: req.params.id}, {$set: doc }, function(err, project){
+    if(err){
+      res.send(err);
+    }
+    else {
+      res.json(project);
+    }
+  });
+});
+
 /*
 router.project('/getProject/:user', function (req, res) {
   Project.find({ 'project.user' : req.params.user}, function (err, projects){

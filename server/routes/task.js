@@ -13,7 +13,7 @@ router.post('/add',function (req, res) {
 	  end: req.body.end,
     color: req.body.color,
     user: req.body.user,
-    post: req.body.post
+    project: req.body.project
   });
 
   task.save()
@@ -27,7 +27,7 @@ router.post('/add',function (req, res) {
 
 
 router.post('/getTask', function (req, res) {
-  Task.find({post : req.body.post})
+  Task.find({project : req.body.project})
    .populate('task').exec(function (err, tasks){
   if(err){
     console.log(err);

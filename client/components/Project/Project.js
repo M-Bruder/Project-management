@@ -5,6 +5,7 @@ import { Card, CardText, CardBody,
 import '../../styles/Project.css';
 import MemberList from '../Member/MemberList';
 
+
 const styles = {
   borderBottom: '2px solid #eee',
   background: '#fafafa',
@@ -14,7 +15,7 @@ const styles = {
   borderRadius: '7px',
 };
 
-export default ({ project: { title, body, _id }, onDelete }) => {
+export default ({ project: { title, body, _id }, onDelete, onEdit }) => {
   return (
     <div className="content" style={ styles }>
       <Row>
@@ -23,7 +24,7 @@ export default ({ project: { title, body, _id }, onDelete }) => {
             <h4><b>{ title }</b></h4>
             <p>{ body }</p>
             <ButtonGroup size="sm" className="optionsProject">
-                <Button color="primary" tag={Link} to={"/groups/" + _id}>Edytuj</Button>
+                <Button color="primary" onClick={() => onEdit(_id)}>Edytuj</Button>
                 <Button color="info" tag={Link} to={"/project/" + _id}>Szczegóły projektu</Button>
                 <Button color="danger" onClick={() => onDelete(_id)}>Usuń</Button>
             </ButtonGroup>
@@ -31,7 +32,7 @@ export default ({ project: { title, body, _id }, onDelete }) => {
         </Col> 
         <Col>
           <div className="member">
-            <MemberList post={ _id } />
+            <MemberList project={ _id } />
           </div>
         </Col>
       </Row>

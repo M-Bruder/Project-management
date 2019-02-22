@@ -11,7 +11,7 @@ class AddMemberList extends Component {
             membersData: [],
             name: '',
             user: localStorage.getItem('user'),
-            postID: ''
+            projectID: ''
           };
       }
     
@@ -23,9 +23,9 @@ class AddMemberList extends Component {
 
 
 componentWillMount = () => {
-        var post = this.props.post;
+        var project = this.props.project;
         axios.post('http://localhost:5000/api/members/getMember', { 
-            post: post
+            project: project
         })
         .then((res) => {
             let membersData = res.data;
@@ -40,12 +40,12 @@ componentWillMount = () => {
 
 handleSubmit = e => {
         e.preventDefault();
-        var post = this.props.post;
+        var project = this.props.project;
         //this.setState({ members: [...this.state.members, this.state.username]});
         axios.post(`http://localhost:5000/api/members/addMember`, { 
             memberName: this.state.name, 
             user: this.state.user,
-            post: post })
+            project: project})
             .then(res => {
                 const data = res.data;
                 this.setState({ membersData: [...this.state.membersData, data]});
@@ -72,7 +72,7 @@ handleSubmit = e => {
     handleReset = () => {
             this.setState({
             name: '',
-            postID: ''
+            projectID: ''
         });
     };
       

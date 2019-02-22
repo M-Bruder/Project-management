@@ -79,40 +79,12 @@ class Gantt extends Component {
   constructor(props) {
     super(props);
     this.handleData = this.handleData.bind(this);
-    let d1 = new Date();
-    let d2 = new Date();
-    d2.setDate(d2.getDate() + 5);
-    let d3 = new Date();
-    d3.setDate(d3.getDate() + 8);
-    let d4 = new Date();
-    d4.setDate(d4.getDate() + 20);
-    console.log(d1, d2, d3, d4);
-
-    let data = [
-      {
-        id: 1,
-        start: d1,
-        end: d2,
-        name: "Zadanie 1",
-        color: "green"
-      },
-      {
-        id: 2,
-        start: d3,
-        end: d4,
-        name: "Zadanie 2",
-        color: "orange"
-      }
-    ];
     this.state = {user: localStorage.getItem('user'), fromChild: [], idTask: '', data: [], links: [], selectedItem: null, timelineMode:"month" };
   }
 
   componentDidMount() {
-    console.log(window.location.hash);
-    console.log(window.location.hash.substr(10));//działa!
-    var post = window.location.hash.substr(10);
-    const { user } = this.state;
-    axios.post(`http://localhost:5000/api/tasks/getTask`, { post }) 
+    var project = window.location.hash.substr(10);
+    axios.post(`http://localhost:5000/api/tasks/getTask`, { project }) 
       .then(res => {
         const data = res.data;
         this.setState({ data });
@@ -130,6 +102,7 @@ class Gantt extends Component {
   handleItemHeight=(e)=>{
     this.setState({itemheight:parseInt(e.target.value)})
   }
+
 //Do tego momentu
   getbuttonStyle(value){
     return this.state.timelineMode==value?{backgroundColor:"grey",boder:'solid 1px #223344'}:{}
@@ -187,10 +160,6 @@ class Gantt extends Component {
     item.name = props.name ? props.name : item.name;
     this.onUpdate(item._id, item.name, item.start, item.end);
     this.setState({ data: [...this.state.data] });
-   
-    console.log(item._id);
-    //this.state.item._id
-    
   };
 
   onUpdate = (id, name, start, end) => {

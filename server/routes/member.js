@@ -12,13 +12,13 @@ router.post('/addMember',function (req, res) {
   const member = new Member({
     members: req.body.memberName,
     user: req.body.user,
-    post: req.body.post
+    project: req.body.project
   });
 
   //member.post.push(member.post);
-  console.log(member.post);
+  console.log(member.project);
   member.save()
-    .then(post => {
+    .then(member => {
     res.status(200).json(member);
     })
     .catch(err => {
@@ -28,8 +28,8 @@ router.post('/addMember',function (req, res) {
 
 
 router.post('/getMember', function (req, res) {
-  Member.find({post : req.body.post})
-   .populate('post').exec(function (err, members){
+  Member.find({project : req.body.project})
+   .populate('project').exec(function (err, members){
   if(err){
     console.log(err);
   }

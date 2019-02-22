@@ -6,24 +6,13 @@ var TaskSchema = mongoose.Schema({
     start: { type: Date },
 	end: { type: Date },
 	color: { type: String },
-	user: 
-	[
-		{ 
-			type: String,
-			ref: 'User' 
-		}
-	],
 	project:  
 	[
 		{ 
-			type: String,
+			type: mongoose.Schema.Types.ObjectId,
 			ref: 'Project' 
 		}
 	]
-    /*links: [{
-        start: { type: String },
-        end: { type: String }
-    }]*/
 });
 
 

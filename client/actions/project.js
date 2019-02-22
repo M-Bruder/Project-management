@@ -1,4 +1,4 @@
-import { ADD_PROJECT, DELETE_PROJECT, FETCH_PROJECT } from './types';
+import { ADD_PROJECT, DELETE_PROJECT, FETCH_PROJECT, EDIT_PROJECT } from './types';
 import axios from 'axios';
 
 const apiUrl = 'http://localhost:5000/api/projects';
@@ -50,18 +50,20 @@ export const deleteProject = id => {
 };
 
 
-export const EditProjectSuccess = id => {
+export const editProjectSuccess = id => {
   return {
     type: EDIT_PROJECT,
     payload: {
-      id
+      id: data._id,
+      title: data.title,
+      body: data.body
     }
   }
 }
 
-export const editProject = id => {
+export const editProject = ({id, title, body}) => {
   return (dispatch) => {
-    return axios.get(`${apiUrl}/edit/${id}`)
+    return axios.put(`${apiUrl}/update/${id}`, {id,title, body})
       .then(response => {
         dispatch(editProjectSuccess(response.data))
       })
@@ -71,10 +73,10 @@ export const editProject = id => {
   };
 };
 
-export const fetchProjects = (posts) => {
+export const fetchProjects = (projects) => {
   return {
     type: FETCH_PROJECT,
-    posts
+    projects
   }
 };
 

@@ -12,7 +12,7 @@ class Profile extends Component {
     this.getProfile = this.getProfile.bind(this);
     this.state = {
       id:'',
-      user: {},
+      user: [],
       name:'',
       surname: '',
       username: localStorage.getItem('user'),
@@ -28,7 +28,7 @@ class Profile extends Component {
   }
 
   onChange = (e) => {
-    const state = this.state
+    const state = this.state.user
     state[e.target.name] = e.target.value;
     this.setState(state);
   }
@@ -47,15 +47,20 @@ class Profile extends Component {
 
     axios.post(`http://localhost:5000/api/auth/getProfile`, { username })
       .then(res => {
-        console.log(res.data)
+        console.log(res.data);
+        let data = res.data;
+        this.setState({ user: data});
       })
       .catch(error => {
         throw(error);
       });
+
+      console.log(this.state);
   }
 
   updateProfile = () => { 
     axios.post('http://localhost:5000/api/auth/updateProfile', {
+      id: this.state.user._id,
       username: this.state.username,
       password: this.state.password
     })
@@ -77,20 +82,20 @@ class Profile extends Component {
     return (
       <div className="container">
         <div className="signin">
-          <form className="form-signin" onSubmit={this.onSubmit}>
+          <form className="form-signin" onSubmit={this.updateProfile}>
             {message !== '' &&
                 <div className="alert alert-warning alert-dismissible" role="alert">
                   { message }
                 </div>
             }
             <h2 className="form-signin-heading">Twoje dane:</h2>
-            <input type="text" id="inputName" className="form-control" placeholder="Imię" name="name" value={this.state.name} onChange={this.onChange}/>
-            <input type="text"  id="inputSurname" className="form-control" placeholder="Nazwisko" name="surname" value={this.state.surname} onChange={this.onChange}/>
-            <input type="text"  id="inputUsername" className="form-control" placeholder="Nazwa użytkownika" name="username" value={this.state.username} onChange={this.onChange} required />
-            <input type="email" id="inputEmail" className="form-control" placeholder="Adres e-mail" name="email" value={this.state.email} onChange={this.onChange} required />
+            <input type="text" id="inputName" className="form-control" placeholder="Imię" name="name" value={this.state.user.name} onChange={this.onChange}/>
+            <input type="text"  id="inputSurname" className="form-control" placeholder="Nazwisko" name="surname" value={this.state.user.surname} onChange={this.onChange}/>
+            <input type="text"  id="inputUsername" className="form-control" placeholder="Nazwa użytkownika" name="username" value={this.state.user.username} onChange={this.onChange}/>
+            <input type="email" id="inputEmail" className="form-control" placeholder="Adres e-mail" name="email" value={this.state.user.email} onChange={this.onChange}/>
             <input type="password" id="inputPassword" className="form-control" placeholder="Hasło" minlength="8" name="password" value={this.state.password} onChange={this.onChange}/>
             <input type="password" id="inputPasswordConfirm" className="form-control" placeholder="Powtórz hasło" minlength="8" name="passwordConfirm" value={this.state.passwordConfirm} onChange={this.onChange}/>
-            <button className="btn btn-lg btn-primary btn-block" type="submit" onClick={this.updateProfile}>Zatwierdź zmiany</button>
+            <button className="btn btn-lg btn-primary btn-block" type="submit" >Zatwierdź zmiany</button>
           </form>
          </div>
       </div>

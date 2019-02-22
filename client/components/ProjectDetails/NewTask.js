@@ -72,7 +72,7 @@ class NewTask extends Component {
         e.preventDefault();
         
         this.sendData();
-        var post = window.location.hash.substr(10)
+        var project = window.location.hash.substr(10)
         axios.post('http://localhost:5000/api/tasks/add', { 
         idTask: this.props.id,
         name: this.checkName(this.state.name),
@@ -80,7 +80,7 @@ class NewTask extends Component {
         end: this.checkEnd(this.state.end),
         color: this.state.color,
         user: this.state.user,
-        post: post})
+        project: project})
           .then((result) => {
             console.log(result);
           });
