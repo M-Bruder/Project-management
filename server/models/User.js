@@ -63,15 +63,12 @@ module.exports.getUserInfo = function(username, callback){
         });
     }
   
-module.exports.updateProfile = function(username, password, callback){
+module.exports.updatePassword = function(username, password, callback){
     User.updateOne( 
             { "email": username },
             { $set: 
                 { "username" : username,
-                  "password" : password,
-                  "name" : name,
-                  "surname": surname,
-                  "enail": email
+                  "password" : password 
                 }
             },function(err, result){
             if(err == null){
@@ -82,7 +79,25 @@ module.exports.updateProfile = function(username, password, callback){
             }
         });
     }
-
+    
+module.exports.updateProfile = function(username, password, callback){
+    User.updateOne( 
+            { "email": username },
+            { $set: 
+                { "username" : username,
+                  "name" : name,
+                  "surname": surname,
+                  "email": email
+                }
+            },function(err, result){
+            if(err == null){
+                callback(true)
+            }
+            else{
+                callback(false)
+            }
+        });
+    }
     module.exports.getUserById = function(id, callback){
         User.findById(id, callback);
     }
