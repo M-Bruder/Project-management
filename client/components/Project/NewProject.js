@@ -1,11 +1,10 @@
-import React from 'react';
-import { FormGroup,ControlLabel,FormControl,Button } from 'react-bootstrap';
+import React from "react";
 
 class NewProject extends React.Component {
   state = {
-    title: '',
-    body: '',
-    user: localStorage.getItem('user')
+    title: "",
+    body: "",
+    user: localStorage.getItem("user")
   };
 
   handleInputChange = e => {
@@ -18,51 +17,53 @@ class NewProject extends React.Component {
     e.preventDefault();
     if (this.state.title.trim() && this.state.body.trim()) {
       console.log(this.state);
-      this.props.onAddProject(
-        {
-            title: this.state.title,
-            body: this.state.body,
-            user: this.state.user
-        }
-    );
+      this.props.onAddProject({
+        title: this.state.title,
+        body: this.state.body,
+        user: this.state.user
+      });
       this.handleReset();
     }
   };
 
   handleReset = () => {
     this.setState({
-      title: '',
-      body: ''
+      title: "",
+      body: ""
     });
   };
 
   render() {
     return (
       <div>
-          <form onSubmit={ this.handleSubmit }>
+        <form className="form" onSubmit={this.handleSubmit}>
           <div className="form-group">
-              <input
+            <input
               type="text"
               placeholder="Nazwa projektu"
               className="form-control"
               name="title"
-              onChange={ this.handleInputChange }
-              value={ this.state.title } required
+              onChange={this.handleInputChange}
+              value={this.state.title}
+              required
             />
           </div>
           <div className="form-group">
-            <textarea              
+            <textarea
               cols="70"
               rows="6"
               placeholder="Opis"
               className="form-control"
               name="body"
-              onChange={ this.handleInputChange }
-              value={ this.state.body } required>
-            </textarea>
+              onChange={this.handleInputChange}
+              value={this.state.body}
+              required
+            />
           </div>
           <div className="form-group text-center">
-            <button type="submit" className="btn btn-primary">Dodaj projekt</button>
+            <button type="submit" className="btn btn-primary">
+              Dodaj projekt
+            </button>
           </div>
         </form>
       </div>

@@ -1,23 +1,13 @@
-html,
-canvas,
-body,
-#react-container,
-#routeContainer {
-  font-family: Helvetica, Arial, sans-serif;
-  height: 100%;
-  margin: 0;
-}
-h5 {
-  color: white;
-}
 html {
   box-sizing: border-box;
 }
+
 *,
 *:before,
 *:after {
   box-sizing: inherit;
 }
+
 .app-container {
   display: flex;
   flex-direction: column;
@@ -26,6 +16,7 @@ html {
   width: 100%;
   height: 100%;
 }
+
 .time-line-container {
   display: flex;
   flex-direction: column;
@@ -35,71 +26,6 @@ html {
   height: 500px;
 }
 
-.list {
-  width: 200px;
-  height: 50%;
-  border: solid 1px silver;
-  border-radius: 10px;
-  box-shadow: 2px 2px silver;
-}
-.itemRenderer {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  border-bottom: solid 1px silver;
-  background-color: white;
-  color: silver;
-  width: 100%;
-  padding: 5px;
-}
-
-.itemRendererSelected {
-  background-color: rgb(219, 223, 230);
-}
-
-.itemRenderer:hover {
-  background-color: rgb(219, 223, 230);
-}
-.itemImage {
-  flex: 1 0 40px;
-  border-radius: 30px;
-  width: 40px;
-}
-.itemTitleContainer {
-  flex: 1 1 auto;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  padding: 4px;
-}
-
-.itemTitle {
-  color: grey;
-  font-size: 14px;
-  align-self: center;
-}
-.itemContent {
-  color: silver;
-  font-size: 10px;
-  align-self: center;
-}
-
-.nav-container {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  background: -moz-linear-gradient(top, #eeeeee 0%, #cccccc 100%);
-  background: -webkit-linear-gradient(
-    top,
-    #eeeeee 0%,
-    #cccccc 100%
-  ); /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(to bottom, #eeeeee 0%, #cccccc 100%);
-  height: 50px;
-  color: grey;
-  align-items: center;
-}
-
 .mode-container {
   display: flex;
   flex-direction: row;
@@ -107,15 +33,6 @@ html {
   align-items: baseline;
   justify-self: flex-end;
   margin: 0px 20px;
-  user-select: none;
-}
-.mode-container-title {
-  margin: 0px 20px;
-  flex: 1 1 auto;
-  text-shadow: 0.5px 0.5px white;
-  font-family: Helvetica, sans-serif;
-  font-size: 22px;
-  font-weight: bolder;
   user-select: none;
 }
 
@@ -139,13 +56,12 @@ html {
   justify-self: flex-end;
 }
 
-
 .mode-container-item-left {
   border-top-left-radius: 17px;
   border-bottom-left-radius: 17px;
 }
+
 .mode-container-item-right {
   border-top-right-radius: 17px;
   border-bottom-right-radius: 17px;
 }
-

@@ -1,10 +1,11 @@
-import React, { Component } from 'react';
-import CreateProject from './Project/CreateProject';
-import ProjectList from './Project/ProjectList';
-import { Button, Collapse, Row, Col } from 'reactstrap';
+import React, { Component } from "react";
+import { Button, Collapse, Row, Col } from "reactstrap";
+import CreateProject from "./Project/CreateProject";
+import ProjectList from "./Project/ProjectList";
+
 const stylesApp = {
   marginTop: 40
-}
+};
 
 class App extends Component {
   constructor(props) {
@@ -20,16 +21,22 @@ class App extends Component {
   render() {
     return (
       <div className="container">
-        <div style={ stylesApp }>
-        <Button color="primary" onClick={this.toggle} style={{ marginBottom: '1rem' }}>Stwórz nowy projekt</Button>
-        <Row>
-          <Col> 
-            <Collapse isOpen={this.state.collapse}>
-              <CreateProject />
-            </Collapse>
-            <ProjectList />
-          </Col> 
-        </Row>
+        <div style={stylesApp}>
+          <Button
+            color="primary"
+            onClick={this.toggle}
+            style={{ marginBottom: "1rem" }}
+          >
+            Stwórz nowy projekt
+          </Button>
+          <Row>
+            <Col>
+              <Collapse isOpen={this.state.collapse}>
+                <CreateProject />
+              </Collapse>
+              <ProjectList />
+            </Col>
+          </Row>
         </div>
       </div>
     );

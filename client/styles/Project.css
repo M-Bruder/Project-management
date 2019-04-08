@@ -1,27 +1,26 @@
-.content{
-    text-align:  center;
+.content {
+  text-align: center;
+  background: #fafafa;
+  margin: .75rem auto;
+  padding: .6rem 1rem;
+  max-width: 80%;
+  border-radius: 7px;
 }
 
 form {
-    text-align: center;
-    margin: 0 auto;
-    display: table;
+  text-align: center;
+  margin: 0 auto;
+  display: table;
 }
 
-
-div.post {
-    margin: 0 auto;
-    width: 100%;
+.project {
+  margin: 0 auto;
 }
 
-div.member {
-    margin: 0 auto;
-    border-left: 3px solid rgb(71, 71, 71);
-    width: 100%;
-    min-height: 170px;
+.member {
+  text-align: center;
+  margin: 0 auto;
+  border-left: 3px solid rgb(71, 71, 71);
+  width: 100%;
+  min-height: 170px;
 }
-
-
-
-    
-    

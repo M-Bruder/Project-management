@@ -1,68 +1,62 @@
 const express = require('express');
+const Task = require('../models/task.model');
+
 const router = express.Router();
 
-const Task = require('../models/Task');
-
-// Defined store rout
-
-router.post('/add',function (req, res) {
+router.post('/add', (req, res) => {
   const task = new Task({
     idTask: req.body.idTask,
     name: req.body.name,
     start: req.body.start,
-	  end: req.body.end,
+    end: req.body.end,
     color: req.body.color,
     user: req.body.user,
-    project: req.body.project
+    project: req.body.project,
   });
 
-  task.save()
-    .then(task => {
-    res.status(200).json(task);
+  task
+    .save()
+    .then((task) => {
+      res.status(200).json(task);
     })
-    .catch(err => {
-    res.status(400).send("unable to save to database");
+    .catch((err) => {
+      res.status(400).send('unable to save to database');
     });
 });
 
-
-router.post('/getTask', function (req, res) {
-  Task.find({project : req.body.project})
-   .populate('task').exec(function (err, tasks){
-  if(err){
-    console.log(err);
-  }
-  else {
-    res.json(tasks);
-  }
-});
-});
-
-
-// Defined delete | remove | destroy route
-router.get('/delete/:id', function (req, res) {
-    Task.findByIdAndRemove({_id: req.params.id}, function(err, task){
-        if(err) res.json(err);
-        else res.json(req.params.id);
+router.post('/getTask', (req, res) => {
+  Task.find({ project: req.body.project })
+    .populate('task')
+    .exec((err, tasks) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.json(tasks);
+      }
     });
 });
 
-router.put('/update/:id', function (req, res) {
+router.get('/delete/:id', (req, res) => {
+  Task.findByIdAndRemove({ _id: req.params.id }, (err, task) => {
+    if (err) res.json(err);
+    else res.json(req.params.id);
+  });
+});
+
+router.put('/update/:id', (req, res) => {
   const doc = {
     name: req.body.name,
     start: req.body.start,
-    end: req.body.end
-};
-console.log(doc);
-  Task.updateOne({_id: req.params.id}, {$set: doc }, function(err, task){
-    if(err){
+    end: req.body.end,
+  };
+  console.log(doc);
+  Task.updateOne({ _id: req.params.id }, { $set: doc }, (err, task) => {
+    if (err) {
       res.send(err);
-    }
-    else {
+    } else {
       res.json(task);
     }
   });
 });
-
 
 module.exports = router;

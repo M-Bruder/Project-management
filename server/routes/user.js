@@ -1,161 +1,120 @@
-var mongoose = require('mongoose');
-var passport = require('passport');
-var settings = require('../config/settings');
-require('../config/passport')(passport);
-var express = require('express');
-var jwt = require('jsonwebtoken');
-var router = express.Router();
-var User = require("../models/user");
+const express = require('express');
+const User = require('../models/user.model');
 
+const router = express.Router();
 
-router.post('/register', function(req, res) {
-  var name = req.body.name;
-  var surname = req.body.surname;
-  var email = req.body.email;
-  var username = req.body.username;
-  var password = req.body.password;
-  var passwordConfirm = req.body.passwordConfirm;
+router.post('/register', (req, res) => {
+  const { email } = req.body;
+  const { username } = req.body;
 
-
-
- User.findOne({ username: { 
-    "$regex": "^" + username + "\\b", "$options": "i"
-}}, function (err, user) {
-    User.findOne({ email: { 
-      "$regex": "^" + email + "\\b", "$options": "i"
-  }}, function (err, mail) {
-      if (user || mail) {
-        res.status(401).send({success: false, msg: 'Username already exists.'});
+  User.findOne(
+    {
+      username: {
+        $regex: `^${username}\\b`,
+        $options: 'i'
       }
-      else {
-        var newUser = new User({
-          _id: req.body_id,
-          name: req.body.name,
-          surname: req.body.surname,
-          email: req.body.email,
-          username: req.body.username,
-          password: req.body.password
-        });
-        // save the user
-        newUser.save(function(err) {
-          if (err) {
-            return res.status(401).send({success: false, msg: 'Username already exists.'});
+    },
+    (err, user) => {
+      User.findOne(
+        {
+          email: {
+            $regex: `^${email}\\b`,
+            $options: 'i'
           }
-          res.json({success: true, msg: 'Successful created new user.'});
-        });
-      }
-    });
-  });
-/*
-  if (!req.body.username || !req.body.password) {
-    res.status(401).json({success: false, msg: 'Please pass username and password.'});
-  } else {
-    var newUser = new User({
-      _id: req.body_id,
-      name: req.body.name,
-      surname: req.body.surname,
-      email: req.body.email,
-      username: req.body.username,
-      password: req.body.password
-    });
-    // save the user
-    newUser.save(function(err) {
-      if (err) {
-        return res.status(401).send({success: false, msg: 'Username already exists.'});
-      }
-      res.json({success: true, msg: 'Successful created new user.'});
-    });
-  }
-  */
-}); 
-
-router.post('/login', function(req, res) {
-  User.findOne({
-    username: req.body.username
-  }, function(err, user) {
-    if (err) throw err;
-
-    if (!user) {
-      res.status(401).send({success: false, msg: 'Authentication failed. User not found.'});
-    } else {
-      // check if password matches
-      user.comparePassword(req.body.password, function (err, isMatch) {
-        if (isMatch && !err) {
-          // if user is found and password is right create a token
-          //var token = user.toJSON(), settings.secret);
-          var token = user;
-          var userid = user._id;
-          console.log(userid);
-          //res.json({success: true, token: 'JWT ' + token});
-          res.json({success: true, token: 'JWT' + token});
-        } else {
-          res.status(401).send({success: false, msg: 'Authentication failed. Wrong password.'});
+        },
+        (err, mail) => {
+          if (user || mail) {
+            res
+              .status(401)
+              .send({ success: false, msg: 'Username already exists.' });
+          } else {
+            const newUser = new User({
+              _id: req.body_id,
+              name: req.body.name,
+              surname: req.body.surname,
+              email: req.body.email,
+              username: req.body.username,
+              password: req.body.password
+            });
+            newUser.save((err) => {
+              if (err) {
+                return res
+                  .status(401)
+                  .send({ success: false, msg: 'Username already exists.' });
+              }
+              res.json({ success: true, msg: 'Successful created new user.' });
+            });
+          }
         }
-      });
+      );
     }
-  });
+  );
 });
 
-router.get('/', (req, res, next) => {
-  console.log('===== user!!======')
-  console.log(req.user)
-  if (req.user) {
-      res.json({ user: req.user })
-  } else {
-      res.json({ user: null })
-  }
-})
+router.post('/login', (req, res) => {
+  User.findOne(
+    {
+      username: req.body.username
+    },
+    (err, user) => {
+      if (err) throw err;
+      if (!user) {
+        res.status(401).send({
+          success: false,
+          msg: 'Authentication failed. User not found.'
+        });
+      } else {
+        user.comparePassword(req.body.password, (err, isMatch) => {
+          if (isMatch && !err) {
+            const token = user;
+            res.json({ success: true, token: `JWT${token}` });
+          } else {
+            res.status(401).send({
+              success: false,
+              msg: 'Authentication failed. Wrong password.'
+            });
+          }
+        });
+      }
+    }
+  );
+});
 
 router.post('/logout', (req, res) => {
   if (req.user) {
-      req.logout()
-      res.send({ msg: 'logging out' })
+    req.logout();
+    res.send({ msg: 'logging out' });
   } else {
-      res.send({ msg: 'no user to log out' })
+    res.send({ msg: 'no user to log out' });
   }
-})
+});
 
-router.post('/getProfile', function(req,res){
-  var username = req.body.username;
-  User.findOne({ username: req.body.username }, function(err, result){
-    if(err){
+router.post('/getProfile', (req, res) => {
+  User.findOne({ username: req.body.username }, (err, result) => {
+    if (err) {
       console.log(err);
-    }
-    else {
+    } else {
       res.json(result);
       console.log(result);
     }
-  })
-})
-
-router.post('/updateProfile', function(req, res){
-  var name = req.body.name;
-  var surname = req.body.surname;
-  var email = req.body.email;
-  var username = req.body.username;
-  User.updateProfile(name, surname, email, username, function(result){
-    res.send(result);
-  })
-})
-
-router.post('/updatePassword', function(req, res){
-  var password = req.body.password;
-  User.updatePassword(password, function(result){
-    res.send(result);
-  })
-})
-
-router.get('/getPost', function (req, res) {
-  User.findOne({ username: req.body.username })
-   .populate('project').exec(function (err, projects){
-  if(err){
-    console.log(err);
-  }
-  else {
-    res.json(projects);
-  }
-});
+  });
 });
 
+router.post('/updateProfile', (req, res) => {
+  const { name } = req.body;
+  const { surname } = req.body;
+  const { email } = req.body;
+  const { username } = req.body;
+  User.updateProfile(req.params.id, name, surname, email, username, (result) => {
+    res.send(result);
+  });
+});
+
+router.post('/updatePassword', (req, res) => {
+  const { password } = req.body;
+  User.updatePassword(req.params.id, password, (result) => {
+    res.send(result);
+  });
+});
 
 module.exports = router;

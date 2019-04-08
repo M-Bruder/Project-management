@@ -1,92 +1,57 @@
 const express = require('express');
+const Project = require('../models/project.model');
+
 const router = express.Router();
 
-// Require Project model in our routes module
-const Project = require('../models/Project');
-//require('./auth');
-
-// Defined store rout
-
-router.post('/add',function (req, res) {
+router.post('/add', (req, res) => {
   const project = new Project({
     title: req.body.title,
     body: req.body.body,
-    user: req.body.user
+    user: req.body.user,
   });
-
-  console.log(project.user);
   project.user.push(project.user);
-  project.save()
-    .then(project => {
-    res.status(200).json(project);
+  project
+    .save()
+    .then((project) => {
+      res.status(200).json(project);
     })
-    .catch(err => {
-    res.status(400).send("unable to save to database");
+    .catch((err) => {
+      res.status(400).send('unable to save to database');
     });
 });
 
-
-router.post('/getProject', function (req, res) {
-  Project.find({user : req.body.user})
-   .populate('project').exec(function (err, projects){
-  if(err){
-    console.log(err);
-  }
-  else {
-    res.json(projects);
-  }
+router.post('/getProject', (req, res) => {
+  Project.find({ user: req.body.user })
+    .populate('project')
+    .exec((err, projects) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.json(projects);
+      }
+    });
 });
-});
 
-router.put('/update/:id', function (req, res) {
+router.put('/update/:id', (req, res) => {
   const doc = {
     title: req.body.title,
-    body: req.body.body
-};
-console.log(doc);
-  Project.updateOne({_id: req.params.id}, {$set: doc }, function(err, project){
-    if(err){
+    body: req.body.body,
+  };
+  console.log(doc);
+  Project.updateOne({ _id: req.params.id }, { $set: doc }, (err, project) => {
+    if (err) {
       res.send(err);
-    }
-    else {
+    } else {
       res.json(project);
     }
   });
 });
 
-/*
-router.project('/getProject/:user', function (req, res) {
-  Project.find({ 'project.user' : req.params.user}, function (err, projects){
-  if(err){
-    console.log(err);
-  }
-  else {
-    res.json(projects);
-  }
-});
-});
-*/
-
-/*
-// Defined get data(index or listing) route
-router.get('/getProject', function (req, res) {
-    Project.find(function (err, projects){
-    if(err){
-      console.log(err);
-    }
-    else {
-      res.json(projects);
-    }
+router.get('/delete/:id', (req, res) => {
+  Project.findByIdAndRemove({ _id: req.params.id }, (err, project) => {
+    if (err) res.json(err);
+    else res.json(req.params.id);
   });
-});
-*/
-
-// Defined delete | remove | destroy route
-router.get('/delete/:id', function (req, res) {
-    Project.findByIdAndRemove({_id: req.params.id}, function(err, project){
-        if(err) res.json(err);
-        else res.json(req.params.id);
-    });
 });
 
 module.exports = router;
