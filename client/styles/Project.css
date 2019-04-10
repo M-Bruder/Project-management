@@ -13,14 +13,7 @@ form {
   display: table;
 }
 
-.project {
-  margin: 0 auto;
-}
-
-.member {
-  text-align: center;
-  margin: 0 auto;
+.members {
   border-left: 3px solid rgb(71, 71, 71);
   width: 100%;
-  min-height: 170px;
 }

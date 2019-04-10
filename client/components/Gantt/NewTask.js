@@ -24,10 +24,6 @@ class NewTask extends Component {
     };
   }
 
-  toggle() {
-    this.setState({ collapse: !this.state.collapse });
-  }
-
   handleInputChange = e => {
     this.setState({
       [e.target.name]: e.target.value
@@ -70,8 +66,7 @@ class NewTask extends Component {
       end: this.checkEnd(this.state.end),
       color: this.state.color
     };
-    this.props.handlerFromParant(newData);
-    console.log(newData);
+    this.props.handlerFromParant(newData);;
   };
 
   handleSubmit = e => {

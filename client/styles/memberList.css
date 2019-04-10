@@ -1,3 +1,9 @@
+
+.member {
+  margin: 0 auto;
+  width: 80%;
+}
+
 .list-group-item {
   width: 100%;
   margin: 5px auto;
@@ -7,10 +13,8 @@
   margin-bottom: 10px;
 }
 
-.content {
-  margin-left: 10px;
-}
 
 .form-addMember {
   margin-top: 10px;
 }
+

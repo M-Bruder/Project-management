@@ -21,16 +21,12 @@ class Login extends Component {
 
   onSubmit = e => {
     e.preventDefault();
-
     const { username, password } = this.state;
 
     axios
       .post("http://localhost:5000/api/auth/login", { username, password })
       .then(result => {
-        const user = username;
-        localStorage.setItem("jwtToken", result.data.token);
-        localStorage.setItem("user", user);
-        // localStorage.setItem('user_id', result.data.userid);
+        localStorage.setItem("user", result.data.userid);
         this.setState({ message: "" });
         this.props.history.push("/project");
       })
@@ -42,8 +38,8 @@ class Login extends Component {
   };
 
   componentDidMount() {
-    if (localStorage.getItem("jwtToken") !== null) {
-      this.props.history.push("/project");
+    if (localStorage.getItem("user") !== null) {
+      this.props.history.push("/");
     }
   }
 

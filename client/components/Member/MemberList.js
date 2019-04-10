@@ -98,7 +98,7 @@ class AddMemberList extends Component {
     ));
     return (
       <div>
-        <div className="content">
+        <div className="member">
           <p>
             <b>Lista członków: </b>
           </p>
@@ -109,11 +109,11 @@ class AddMemberList extends Component {
               <p>Nie przydzielono członków do projektu!</p>
             )}
           </ListGroup>
-          <Form size="sm" className="form-addMember" onSubmit={this.handleSubmit}>
+          <Form bssize="sm" className="form-addMember" onSubmit={this.handleSubmit}>
             <Row form>
               <FormGroup>
                 <Input
-                  size="sm"
+                  bssize="sm"
                   type="text"
                   name="name"
                   id="nameTask"

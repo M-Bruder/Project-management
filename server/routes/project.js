@@ -9,14 +9,13 @@ router.post('/add', (req, res) => {
     body: req.body.body,
     user: req.body.user,
   });
-  project.user.push(project.user);
   project
     .save()
     .then((project) => {
       res.status(200).json(project);
     })
     .catch((err) => {
-      res.status(400).send('unable to save to database');
+      res.status(400).send('Unable to save to database');
     });
 });
 

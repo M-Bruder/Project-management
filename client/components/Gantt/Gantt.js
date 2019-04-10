@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Button } from "reactstrap";
 import TimeLine from "react-gantt-timeline";
-import "../../styles/Gantt.css";
+import "../../styles/gantt.css";
 import axios from "axios";
 import NewTask from "./NewTask";
 
@@ -173,7 +173,6 @@ class Gantt extends Component {
         (item.start > start && item.start < end) ||
         (item.end > start && item.end < end)
     );
-    console.log("Calculating ");
     this.setState({ data: result });
   };
 

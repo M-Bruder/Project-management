@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
 
-
 class Profile extends Component {
   constructor(props) {
     super(props);
@@ -9,11 +8,11 @@ class Profile extends Component {
     this.updateProfile = this.updateProfile.bind(this);
     this.getProfile = this.getProfile.bind(this);
     this.state = {
-      id: "",
+      id: localStorage.getItem("user"),
       user: [],
       name: "",
       surname: "",
-      username: localStorage.getItem("user"),
+      username: "",
       email: "",
       password: "",
       passwordConfirm: "",
@@ -31,34 +30,22 @@ class Profile extends Component {
     this.setState(state);
   };
 
-  logout = () => {
-    localStorage.removeItem("jwtToken");
-    localStorage.removeItem("user");
-    this.props.history.push("/");
-  };
-
   getProfile = () => {
-    const { username } = this.state;
-    // self.setState({password: result.data.password});
-
+    const { id } = this.state;
     axios
-      .post("http://localhost:5000/api/auth/getProfile", { username })
+      .post("http://localhost:5000/api/auth/getProfile", { id })
       .then(res => {
-        console.log(res.data);
         const { data } = res;
         this.setState({ user: data });
-        console.log(this.state.user._id);
       })
       .catch(error => {
         throw error;
       });
-
-    console.log(this.state);
   };
 
   updateProfile = () => {
     axios
-      .post("http://localhost:5000/api/auth/updateProfile", {
+      .put("http://localhost:5000/api/auth/updateProfile", {
         id: this.state.user._id,
         name: this.state.name,
         surname: this.state.surname,
@@ -67,13 +54,11 @@ class Profile extends Component {
       })
       .then(result => {
         if (result) {
-          console.log(`${username} hasło ${password}`);
           console.log(result);
-          // hashHistory.push('/')
         }
       })
       .catch(error => {
-        console.log("error is ", error);
+        console.log(error);
       });
     this.updatePassword();
   };
@@ -87,26 +72,18 @@ class Profile extends Component {
       this.setState({ message: "Hasła do siebie nie pasują" });
     } else {
       axios
-        .post("http://localhost:5000/api/auth/updatePassword", {
+        .put("http://localhost:5000/api/auth/updatePassword", {
           id: this.state.user._id,
           password: this.state.password
         })
         .then(result => {
           if (result) {
             console.log(result);
-            // hashHistory.push('/')
           }
         })
         .catch(error => {
-          console.log("error is ", error);
+          console.log(error);
         });
-    }
-  };
-
-  checkPassword = () => {
-    const { password, passwordConfirm } = this.state;
-    if (password !== passwordConfirm) {
-      this.setState({ message: "Hasła do siebie nie pasują" });
     }
   };
 

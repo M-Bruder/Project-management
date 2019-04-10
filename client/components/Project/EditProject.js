@@ -6,7 +6,7 @@ import {
   Row,
   Col
 } from "reactstrap";
-import "../../styles/Project.css";
+import "../../styles/project.css";
 import MemberList from "../Member/MemberList";
 
 class Project extends Component {
@@ -58,7 +58,6 @@ class Project extends Component {
         <div className="content">
           <Row>
             <Col>
-              <div className="project">
                 <h4>
                   <b>{this.state.title}</b>
                 </h4>
@@ -87,7 +86,6 @@ class Project extends Component {
                       required
                     />
                   </div>
-
                   <ButtonGroup size="sm" className="optionsProject">
                     <Button color="primary" type="onSubmit">
                       Zapisz zmiany
@@ -100,7 +98,7 @@ class Project extends Component {
                     </Button>
                   </ButtonGroup>
                 </form>
-              </div>
+              
             </Col>
             <Col>
               <div className="members">
@@ -115,7 +113,6 @@ class Project extends Component {
       <div className="content">
         <Row>
           <Col>
-            <div className="post">
               <h4>
                 <b>{this.state.project.title}</b>
               </h4>
@@ -138,10 +135,9 @@ class Project extends Component {
                   Usuń
                 </Button>
               </ButtonGroup>
-            </div>
           </Col>
           <Col>
-            <div className="member">
+            <div className="members">
               <MemberList project={this.state.project._id} />
             </div>
           </Col>

@@ -28,13 +28,11 @@ class Header extends React.Component {
   }
 
   logout = () => {
-    localStorage.removeItem("jwtToken");
     localStorage.removeItem("user");
-    window.location.reload();
   };
 
   render() {
-    if (localStorage.getItem("jwtToken") !== null) {
+    if (localStorage.getItem("user") !== null) {
       return (
         <div>
           <Navbar color="primary" dark expand="md">

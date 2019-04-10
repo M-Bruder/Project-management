@@ -26,7 +26,7 @@ router.post('/register', (req, res) => {
           if (user || mail) {
             res
               .status(401)
-              .send({ success: false, msg: 'Username already exists.' });
+              .send({ success: false, msg: 'Istniejąca nazwa użykownika lub adres e-mail!' });
           } else {
             const newUser = new User({
               _id: req.body_id,
@@ -38,11 +38,9 @@ router.post('/register', (req, res) => {
             });
             newUser.save((err) => {
               if (err) {
-                return res
-                  .status(401)
-                  .send({ success: false, msg: 'Username already exists.' });
+                return res.status(401).send({ success: false });
               }
-              res.json({ success: true, msg: 'Successful created new user.' });
+              res.json({ success: true, msg: 'Pomyślnie stworzono konto!' });
             });
           }
         }
@@ -52,32 +50,27 @@ router.post('/register', (req, res) => {
 });
 
 router.post('/login', (req, res) => {
-  User.findOne(
-    {
-      username: req.body.username
-    },
-    (err, user) => {
-      if (err) throw err;
-      if (!user) {
-        res.status(401).send({
-          success: false,
-          msg: 'Authentication failed. User not found.'
-        });
-      } else {
-        user.comparePassword(req.body.password, (err, isMatch) => {
-          if (isMatch && !err) {
-            const token = user;
-            res.json({ success: true, token: `JWT${token}` });
-          } else {
-            res.status(401).send({
-              success: false,
-              msg: 'Authentication failed. Wrong password.'
-            });
-          }
-        });
-      }
+  User.getUserByUsernameorEmail(req.body.username, (err, user) => {
+    if (err) throw err;
+    if (!user) {
+      res.status(401).send({
+        success: false,
+        msg: 'Nie prawidłowa nazwa użykownika lub adres e-mail!'
+      });
+    } else {
+      user.comparePassword(req.body.password, (err, isMatch) => {
+        if (isMatch && !err) {
+          const userid = user._id;
+          res.json({ success: true, userid: userid });
+        } else {
+          res.status(401).send({
+            success: false,
+            msg: 'Nie prawidłowe hasło!'
+          });
+        }
+      });
     }
-  );
+  });
 });
 
 router.post('/logout', (req, res) => {
@@ -90,30 +83,43 @@ router.post('/logout', (req, res) => {
 });
 
 router.post('/getProfile', (req, res) => {
-  User.findOne({ username: req.body.username }, (err, result) => {
+  User.findById(req.body.id, (err, result) => {
     if (err) {
       console.log(err);
     } else {
       res.json(result);
-      console.log(result);
     }
   });
 });
 
-router.post('/updateProfile', (req, res) => {
-  const { name } = req.body;
-  const { surname } = req.body;
-  const { email } = req.body;
-  const { username } = req.body;
-  User.updateProfile(req.params.id, name, surname, email, username, (result) => {
-    res.send(result);
+router.put('/updateProfile', (req, res) => {
+  const doc = {
+    name: req.body.name,
+    surname: req.body.surname,
+    email: req.body.email,
+    username: req.body.username
+  };
+  User.updateOne({ _id: req.body.id }, { $set: doc }, (err, user) => {
+    if (err) {
+      res.send(err);
+    } else {
+      res.json(user);
+    }
   });
 });
 
-router.post('/updatePassword', (req, res) => {
-  const { password } = req.body;
-  User.updatePassword(req.params.id, password, (result) => {
-    res.send(result);
+router.put('/updatePassword', (req, res) => {
+  User.updatePassword(req.body.password, (passwd) => {
+    const doc = {
+      password: passwd
+    };
+    User.updateOne({ _id: req.body.id }, { $set: doc }, (err, user) => {
+      if (err) {
+        res.send(err);
+      } else {
+        res.json(user);
+      }
+    });
   });
 });
 

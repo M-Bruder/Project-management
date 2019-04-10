@@ -49,7 +49,6 @@ router.put('/update/:id', (req, res) => {
     start: req.body.start,
     end: req.body.end,
   };
-  console.log(doc);
   Task.updateOne({ _id: req.params.id }, { $set: doc }, (err, task) => {
     if (err) {
       res.send(err);
