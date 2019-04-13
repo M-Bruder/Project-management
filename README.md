@@ -14,7 +14,7 @@ npm install
 ```
 4. Now you can run app by command:
 ```
-npm run dev
+npm run start
 ```
 
 It will run for:
@@ -50,30 +50,21 @@ It's all connected with database MongoDB.
   #### Back-end
 
 - [Nodemon](https://nodemon.io/) - Auto-refresh the server on code change
-- [Bcrypt-nodejs](https://www.npmjs.com/package/bcrypt-nodejs) - Password hashing function hash passwords
+- [Bcrypt-nodejs](https://www.npmjs.com/package/bcrypt-nodejs) - Password hashing 
 - [Mongoose](https://mongoosejs.com/) - Mongodb object modeling for node.js
 
   #### Others:
 
-- [Eslint] - Linting utility for JavaScript and JSX
+- [Eslint](https://eslint.org/) - Linting utility for JavaScript and JSX
 
 ## Result app
 
 Login            |  Register
 :-------------------------:|:-------------------------:
 <img src="https://github.com/M-Bruder/Project-management/blob/master/img-readme/login.png" width="450" height="210" alt="login-img"> | <img src="https://github.com/M-Bruder/Project-management/blob/master/img-readme/register.png" width="450" height="210" alt="register-img">
-<p align="center">
-  <img src="https://github.com/M-Bruder/Project-management/blob/master/img-readme/login.png" width="450" height="210" alt="login-img">
- </p>
- <p align="center">
-  <img src="https://github.com/M-Bruder/Project-management/blob/master/img-readme/register.png" width="450" height="210" alt="register-img">
- </p>
- <p align="center">
-  <img src="https://github.com/M-Bruder/Project-management/blob/master/img-readme/project.png" width="450" height="210" alt="project-img">
- </p>
- <p align="center">
-  <img src="https://github.com/M-Bruder/Project-management/blob/master/img-readme/gantt.png" width="450" height="210" alt="gantt-img">
- </p>
 
+Project List            | Project Details 
+:-------------------------:|:-------------------------:
+<img src="https://github.com/M-Bruder/Project-management/blob/master/img-readme/project.png" width="450" height="210" alt="project-img"> | <img src="https://github.com/M-Bruder/Project-management/blob/master/img-readme/gantt.png" width="450" height="210" alt="gantt-img">
 
 
