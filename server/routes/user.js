@@ -36,11 +36,11 @@ router.post('/register', (req, res) => {
               username: req.body.username,
               password: req.body.password
             });
-            newUser.save((err) => {
+            newUser.save((err, user) => {
               if (err) {
-                return res.status(401).send({ success: false });
-              }
-              res.json({ success: true, msg: 'Pomyślnie stworzono konto!' });
+                return res.status(401).send({ success: false, msg: err });
+              } 
+                return res.json({ success: true, msg: user });
             });
           }
         }
@@ -61,7 +61,7 @@ router.post('/login', (req, res) => {
       user.comparePassword(req.body.password, (err, isMatch) => {
         if (isMatch && !err) {
           const userid = user._id;
-          res.json({ success: true, userid: userid });
+          res.json({ success: true, userid });
         } else {
           res.status(401).send({
             success: false,
@@ -83,12 +83,11 @@ router.post('/logout', (req, res) => {
 });
 
 router.post('/getProfile', (req, res) => {
-  User.findById(req.body.id, (err, result) => {
+  User.findById(req.body.id, (err, user) => {
     if (err) {
-      console.log(err);
-    } else {
-      res.json(result);
+      res.send(err);
     }
+      res.json(user); 
   });
 });
 

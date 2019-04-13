@@ -1,9 +1,9 @@
-import React, { Component } from "react";
-import { Button } from "reactstrap";
-import TimeLine from "react-gantt-timeline";
-import "../../styles/gantt.css";
-import axios from "axios";
-import NewTask from "./NewTask";
+import React, { Component } from 'react';
+import { Button } from 'reactstrap';
+import TimeLine from 'react-gantt-timeline';
+import '../../styles/gantt.css';
+import axios from 'axios';
+import NewTask from './NewTask';
 
 const config = {
   header: {
@@ -20,39 +20,39 @@ const config = {
     bottom: {
       style: {
         fontSize: 10,
-        color: "#FFFFFF"
+        color: '#FFFFFF'
       },
       selectedStyle: {
-        fontWeight: "700",
-        color: "#FF0000"
+        fontWeight: '700',
+        color: '#FF0000'
       }
     }
   },
   taskList: {
     title: {
-      label: "Zadania:"
+      label: 'Zadania:'
     },
     task: {
       style: {
-        backgroundColor: "#808080",
-        color: "#FFFFFF"
+        backgroundColor: '#808080',
+        color: '#FFFFFF'
       }
     }
   },
   dataViewPort: {
     rows: {
       style: {
-        borderBottom: "solid 1px #808080"
+        borderBottom: 'solid 1px #808080'
       }
     },
     task: {
       showLabel: false,
       style: {
         borderRadius: 10,
-        boxShadow: "2px 2px 8px #888888"
+        boxShadow: '2px 2px 8px #888888'
       },
       selectedStyle: {
-        border: "solid 1px #ff00fa"
+        border: 'solid 1px #ff00fa'
       }
     }
   }
@@ -62,39 +62,121 @@ class Gantt extends Component {
     super(props);
     this.handleData = this.handleData.bind(this);
     this.state = {
-      user: localStorage.getItem("user"),
-      fromChild: [],
-      idTask: "",
+      date: new Date(),
       data: [],
       selectedItem: null,
-      timelineMode: "month"
+      timelineMode: 'month'
     };
   }
 
   componentDidMount() {
     const project = window.location.hash.substr(10);
     axios
-      .post("http://localhost:5000/api/tasks/getTask", { project })
-      .then(res => {
+      .post('http://localhost:5000/api/tasks/getTask', { project })
+      .then((res) => {
         const { data } = res;
         this.setState({ data });
       })
-      .catch(error => {
+      .catch((error) => {
         throw error;
       });
   }
 
   getbuttonStyle(value) {
-    return this.state.timelineMode == value
-      ? { backgroundColor: "#808080", boder: "solid 1px #223344" }
+    const { timelineMode } = this.state;
+    return timelineMode === value
+      ? { backgroundColor: '#808080', boder: 'solid 1px #223344' }
       : {};
   }
 
-  modeChange = value => {
+  modeChange = (value) => {
     this.setState({ timelineMode: value });
   };
 
-  genID() {
+  onUpdateTask = (items, props) => {
+    const item = items;
+    const { data } = this.state;
+    item.start = props.start ? props.start : item.start;
+    item.end = props.end ? props.end : item.end;
+    item.name = props.name ? props.name : item.name;
+    this.onUpdate(item._id, item.name, item.start, item.end);
+    this.setState({ data: [...data] });
+  };
+
+  onUpdate = (id, name, start, end) => {
+    axios
+      .put(`http://localhost:5000/api/tasks/update/${id}`, { name, start, end })
+      .catch((error) => {
+        throw error;
+      });
+  };
+
+  onSelectItem = (item) => {
+    this.setState({ selectedItem: item });
+  };
+
+  idExists = (id) => {
+    const { data } = this.state;
+    data.some(el => el.id === id);
+  };
+
+  addID = (id) => {
+    if (this.idExists(id)) {
+      return this.addID(id + 1);
+    }
+    return id;
+  };
+
+  addTask = () => {
+    const { data, date } = this.state; 
+    const newTask = {
+      id: this.addID(data.length + 1),
+      start: date,
+      end: this.getRandomDate(),
+      name: 'Nowe zadanie',
+      color: this.getRandomColor()
+    };
+    this.setState({ data: [...data, newTask] });
+  };
+
+  delete = () => {
+    const { selectedItem, data } = this.state;
+    this.onDelete(selectedItem._id);
+    if (selectedItem) {
+      const index = data.indexOf(selectedItem);
+      if (index > -1) {
+        data.splice(index, 1);
+        this.setState({ data: [...data] });
+      }
+    }
+  };
+
+  onDelete = (id) => {
+    axios
+      .get(`http://localhost:5000/api/tasks/delete/${id}`)
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        throw error;
+      });
+  };
+
+  onHorizonChange = (start, end) => {
+    const result = this.data.filter(
+      item => (item.start < start && item.end > end)
+        || (item.start > start && item.start < end)
+        || (item.end > start && item.end < end)
+    );
+    this.setState({ data: result });
+  };
+
+  handleData = (newData) => {
+    const { data } = this.state;
+    this.setState({ data: [...data, newData] });
+  };
+
+  genID = () => {
     function S4() {
       return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
     }
@@ -104,93 +186,13 @@ class Gantt extends Component {
     )}-${S4()}-${S4()}${S4()}${S4()}`.toLowerCase();
   }
 
-  onUpdateTask = (item, props) => {
-    item.start = props.start ? props.start : item.start;
-    item.end = props.end ? props.end : item.end;
-    item.name = props.name ? props.name : item.name;
-    this.onUpdate(item._id, item.name, item.start, item.end);
-    this.setState({ data: [...this.state.data] });
-  };
-
-  onUpdate = (id, name, start, end) => {
-    axios
-      .put(`http://localhost:5000/api/tasks/update/${id}`, { name, start, end })
-      .catch(error => {
-        throw error;
-      });
-  };
-
-  onSelectItem = item => {
-    this.setState({ selectedItem: item });
-  };
-
-  idExists = id => this.state.data.some(el => el.id === id);
-
-  addID = id => {
-    if (this.idExists(id)) {
-      return this.addID(id + 1);
-    }
-    return id;
-  };
-
-  addTask = () => {
-    const newTask = {
-      id: this.addID(this.state.data.length + 1),
-      start: new Date(),
-      end: this.getRandomDate(),
-      name: "Nowe zadanie",
-      color: this.getRandomColor()
-    };
-    this.setState({ idTask: newTask.id, data: [...this.state.data, newTask] });
-  };
-
-  delete = () => {
-    this.onDelete(this.state.selectedItem._id);
-    if (this.state.selectedItem) {
-      let index = this.state.data.indexOf(this.state.selectedItem);
-      if (index > -1) {
-        this.state.data.splice(index, 1);
-        this.setState({ data: [...this.state.data] });
-      }
-    }
-  };
-
-  onDelete = id => {
-    axios
-      .get(`http://localhost:5000/api/tasks/delete/${id}`)
-      .then(response => {
-        console.log(response.data);
-      })
-      .catch(error => {
-        throw error;
-      });
-  };
-
-  onHorizonChange = (start, end) => {
-    const result = this.data.filter(
-      item =>
-        (item.start < start && item.end > end) ||
-        (item.start > start && item.start < end) ||
-        (item.end > start && item.end < end)
-    );
-    this.setState({ data: result });
-  };
-
-  handleData = newData => {
-    const genID = { id: this.addID(this.state.data.length + 1) };
-    this.setState({ idTask: genID });
-    this.setState({
-      fromChild: newData
-    });
-    this.setState({ data: [...this.state.data, newData] });
-  };
-
   render() {
+    const { data, timelineMode, selectedItem } = this.state;
     return (
       <div className="app-container">
         <div className="mode-container row mt-3">
           <NewTask
-            id={this.addID(this.state.data.length + 1)}
+            id={this.addID(data.length + 1)}
             handlerFromParant={this.handleData}
           />
           <div className="operation-button-container">
@@ -200,15 +202,21 @@ class Gantt extends Component {
             <div className="mode-container float-left">
               <div
                 className="mode-container-item mode-container-item-left"
-                onClick={e => this.modeChange("month")}
-                style={this.getbuttonStyle("month")}
+                onClick={() => this.modeChange('month')}
+                style={this.getbuttonStyle('month')}
+                role="button"
+                tabIndex={0}
+                aria-hidden="true"
               >
                 Miesiąc
               </div>
               <div
                 className="mode-container-item mode-container-item-right"
-                onClick={e => this.modeChange("year")}
-                style={this.getbuttonStyle("year")}
+                onClick={() => this.modeChange('year')}
+                style={this.getbuttonStyle('year')}
+                role="button"
+                tabIndex={0}
+                aria-hidden="true"
               >
                 Rok
               </div>
@@ -217,11 +225,11 @@ class Gantt extends Component {
         </div>
         <div className="time-line-container">
           <TimeLine
-            data={this.state.data}
+            data={data}
             onUpdateTask={this.onUpdateTask}
             onSelectItem={this.onSelectItem}
-            selectedItem={this.state.selectedItem}
-            mode={this.state.timelineMode}
+            selectedItem={selectedItem}
+            mode={timelineMode}
             config={config}
           />
         </div>
@@ -229,7 +237,5 @@ class Gantt extends Component {
     );
   }
 }
-
-// <Button color="warning" onClick={this.addTask}>Dodaj zadanie</Button>
 
 export default Gantt;

@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 
 const TaskSchema = mongoose.Schema({
-  idTask: { type: Number },
   name: { type: String, index: true },
   start: { type: Date },
   end: { type: Date },

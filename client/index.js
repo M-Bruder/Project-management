@@ -1,38 +1,36 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import { Provider } from "react-redux";
-import { HashRouter ,BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import "./styles/index.css";
-import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
+import { HashRouter, Switch, Route } from 'react-router-dom';
+import './styles/index.css';
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
-import Header from "./components/Partials/Header";
-import Project from "./containers/Project";
-import ProjectDetails from "./containers/ProjectDetails";
-import Login from "./containers/Login";
-import Register from "./containers/Register";
-import Profile from "./containers/Profile";
+import Header from './components/Partials/Header';
+import Project from './containers/Project';
+import ProjectDetails from './containers/ProjectDetails';
+import Login from './containers/Login';
+import Register from './containers/Register';
+import Profile from './containers/Profile';
 
-import store from "./store/store";
-
-
+import store from './store/store';
 
 const Root = () => (
   <Provider store={store}>
     <HashRouter>
-        <div className="app">
-          <Header />
-          <Switch>
-            <Route exact path="/" component={Login} />
-            <Route path="/register" component={Register} />
-            <Route exact path="/project" component={Project} />
-            <Route path="/project/:id" component={ProjectDetails} />
-            <Route path="/profile" component={Profile} />
-          </Switch>
-        </div>
+      <div className="app">
+        <Header />
+        <Switch>
+          <Route exact path="/" component={Login} />
+          <Route path="/register" component={Register} />
+          <Route exact path="/project" component={Project} />
+          <Route path="/project/:id" component={ProjectDetails} />
+          <Route path="/profile" component={Profile} />
+        </Switch>
+      </div>
     </HashRouter>
   </Provider>
 );
 
-ReactDOM.render(<Root />, document.getElementById("root"));
+ReactDOM.render(<Root />, document.getElementById('root'));
 
 module.hot.accept();

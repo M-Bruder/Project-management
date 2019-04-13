@@ -22,7 +22,6 @@ export const createProject = ({ title, body, user }) => dispatch => axios
   .post(`${apiUrl}/add`, { title, body, user })
   .then((res) => {
     dispatch(createProjectSuccess(res.data));
-    console.log(res.data);
   })
   .catch((error) => {
     throw error;
@@ -44,7 +43,7 @@ export const deleteProject = id => dispatch => axios
     throw error;
   });
 
-export const editProjectSuccess = id => ({
+export const editProjectSuccess = data => ({
   type: EDIT_PROJECT,
   payload: {
     id: data._id,

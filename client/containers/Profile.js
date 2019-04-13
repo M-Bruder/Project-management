@@ -1,22 +1,21 @@
-import React, { Component } from "react";
-import axios from "axios";
+import React, { Component } from 'react';
+import axios from 'axios';
 
 class Profile extends Component {
   constructor(props) {
     super(props);
     this.onChange = this.onChange.bind(this);
-    this.updateProfile = this.updateProfile.bind(this);
     this.getProfile = this.getProfile.bind(this);
     this.state = {
-      id: localStorage.getItem("user"),
+      id: localStorage.getItem('user'),
       user: [],
-      name: "",
-      surname: "",
-      username: "",
-      email: "",
-      password: "",
-      passwordConfirm: "",
-      message: ""
+      name: '',
+      surname: '',
+      username: '',
+      email: '',
+      password: '',
+      passwordConfirm: '',
+      message: ''
     };
   }
 
@@ -24,76 +23,91 @@ class Profile extends Component {
     this.getProfile();
   }
 
-  onChange = e => {
-    const state = this.state.user;
-    state[e.target.name] = e.target.value;
+  onChange = (e) => {
+    const { state } = this;
+    state[e.target.name] = [e.target.value];
     this.setState(state);
   };
 
   getProfile = () => {
     const { id } = this.state;
     axios
-      .post("http://localhost:5000/api/auth/getProfile", { id })
-      .then(res => {
+      .post('http://localhost:5000/api/auth/getProfile', { id })
+      .then((res) => {
         const { data } = res;
         this.setState({ user: data });
+        this.setState({
+          name: data.name,
+          surname: data.surname,
+          username: data.username,
+          email: data.email
+        });
       })
-      .catch(error => {
+      .catch((error) => {
         throw error;
       });
   };
 
-  updateProfile = () => {
+  handleSubmit = () => {
+    const {
+ id, name, surname, username, email 
+} = this.state;
     axios
-      .put("http://localhost:5000/api/auth/updateProfile", {
-        id: this.state.user._id,
-        name: this.state.name,
-        surname: this.state.surname,
-        username: this.state.username,
-        email: this.state.email
+      .put('http://localhost:5000/api/auth/updateProfile', {
+        id,
+        name,
+        surname,
+        username,
+        email
       })
-      .then(result => {
-        if (result) {
-          console.log(result);
-        }
+      .then((result) => {
+        console.log(result);
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
     this.updatePassword();
   };
 
   updatePassword = () => {
-    const { password, passwordConfirm } = this.state;
-    if (
-      password !== passwordConfirm &&
-      (this.state.password.trim() && this.state.passwordConfirm.trim())
-    ) {
-      this.setState({ message: "Hasła do siebie nie pasują" });
+    const { id, password, passwordConfirm } = this.state;
+    if (password === passwordConfirm) {
+      this.setState({ message: 'Hasła nie zostało zmienione!' });
+    } else if (!password && !passwordConfirm) {
+      console.log('!password and passwrodconfigt');
+      this.setState({ message: 'Hasła nie zostało zmienione!' });
     } else {
       axios
-        .put("http://localhost:5000/api/auth/updatePassword", {
-          id: this.state.user._id,
-          password: this.state.password
+        .put('http://localhost:5000/api/auth/updatePassword', {
+          id,
+          password
         })
-        .then(result => {
+        .then((result) => {
           if (result) {
             console.log(result);
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     }
   };
 
   render() {
-    const { message } = this.state;
+    const {
+      message,
+      name,
+      username,
+      surname,
+      email,
+      password,
+      passwordConfirm
+    } = this.state;
     return (
       <div className="container">
         <div className="signin">
-          <form className="form-signin" onSubmit={this.updateProfile}>
-            {message !== "" && (
+          <form className="form-signin" onSubmit={this.handleSubmit}>
+            {message !== '' && (
               <div
                 className="alert alert-warning alert-dismissible"
                 role="alert"
@@ -108,7 +122,7 @@ class Profile extends Component {
               className="form-control"
               placeholder="Imię"
               name="name"
-              value={this.state.user.name || this.state.name}
+              value={name}
               onChange={this.onChange}
             />
             <input
@@ -117,7 +131,7 @@ class Profile extends Component {
               className="form-control"
               placeholder="Nazwisko"
               name="surname"
-              value={this.state.user.surname || this.state.surname}
+              value={surname}
               onChange={this.onChange}
             />
             <input
@@ -126,7 +140,7 @@ class Profile extends Component {
               className="form-control"
               placeholder="Nazwa użytkownika"
               name="username"
-              value={this.state.user.username || this.state.username}
+              value={username}
               onChange={this.onChange}
             />
             <input
@@ -135,7 +149,7 @@ class Profile extends Component {
               className="form-control"
               placeholder="Adres e-mail"
               name="email"
-              value={this.state.user.email || this.state.email}
+              value={email}
               onChange={this.onChange}
             />
             <input
@@ -145,7 +159,7 @@ class Profile extends Component {
               placeholder="Hasło"
               minLength="8"
               name="password"
-              value={this.state.password}
+              value={password}
               onChange={this.onChange}
             />
             <input
@@ -155,12 +169,12 @@ class Profile extends Component {
               placeholder="Powtórz hasło"
               minLength="8"
               name="passwordConfirm"
-              value={this.state.passwordConfirm}
+              value={passwordConfirm}
               onChange={this.onChange}
             />
             <button
               className="btn btn-lg btn-primary btn-block"
-              type="onSubmit"
+              type="submit"
             >
               Zatwierdź zmiany
             </button>

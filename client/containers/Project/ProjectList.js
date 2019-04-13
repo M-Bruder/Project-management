@@ -1,15 +1,17 @@
-import React from "react";
-import { connect } from "react-redux";
-import Project from "../../components/Project/EditProject";
+import React from 'react';
+import { connect } from 'react-redux';
+import Project from '../../components/Project/EditProject';
 import {
   deleteProject,
   fetchAllProjects,
   editProject
-} from "../../actions/project";
+} from '../../actions/project';
 
-function ProjectList({ projects, onDelete, onLoadProject, onEditProject }) {
+function ProjectList({
+  projects, onDelete, onLoadProject, onEditProject
+}) {
   if (!projects.length) {
-    const user = localStorage.getItem("user");
+    const user = localStorage.getItem('user');
     onLoadProject(user);
     return (
       <div className="text-white text-center">
@@ -40,13 +42,13 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onLoadProject: user => {
+  onLoadProject: (user) => {
     dispatch(fetchAllProjects(user));
   },
-  onDelete: id => {
+  onDelete: (id) => {
     dispatch(deleteProject(id));
   },
-  onEditProject: project => {
+  onEditProject: (project) => {
     dispatch(editProject(project));
   }
 });

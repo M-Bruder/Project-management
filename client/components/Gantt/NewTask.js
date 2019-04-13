@@ -1,5 +1,6 @@
-import React, { Component } from "react";
-import axios from "axios";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import axios from 'axios';
 import {
   Col,
   FormGroup,
@@ -8,50 +9,55 @@ import {
   Input,
   Form,
   Row
-} from "reactstrap";
+} from 'reactstrap';
 
 class NewTask extends Component {
+  static get propTypes() {
+    return {
+      handlerFromParant: PropTypes.func.isRequired
+    };
+  }
+  
+
   constructor(props) {
     super(props);
     this.sendData = this.sendData.bind(this);
     this.state = {
-      id: "",
-      name: "",
-      start: "",
-      end: "",
-      color: "#ff0000",
-      user: localStorage.getItem("user")
+      name: '',
+      start: '',
+      end: '',
+      color: '#ff0000',
     };
   }
 
-  handleInputChange = e => {
+  handleInputChange = (e) => {
     this.setState({
       [e.target.name]: e.target.value
     });
   };
 
-  checkName = nameValue => {
-    if (nameValue == "") {
-      this.setState({ name: "Nowe zadanie" });
-      return "Nowe zadanie";
+  checkName = (nameValue) => {
+    if (nameValue === '') {
+      this.setState({ name: 'Nowe zadanie' });
+      return 'Nowe zadanie';
     }
     return nameValue;
   };
 
-  checkStart = startValue => {
+  checkStart = (startValue) => {
     const date = new Date();
-    if (startValue === null || startValue === "") {
+    if (startValue === null || startValue === '') {
       this.setState({ start: date });
       return date;
     }
     return startValue;
   };
 
-  checkEnd = endValue => {
+  checkEnd = (endValue) => {
     const date = new Date();
     date.setDate(date.getDate() + 5);
 
-    if (endValue === null || endValue === "") {
+    if (endValue === null || endValue === '') {
       this.setState({ end: date });
       return date;
     }
@@ -59,32 +65,35 @@ class NewTask extends Component {
   };
 
   sendData = () => {
+    const { handlerFromParant } = this.props;
+    const {
+      name, start, end, color 
+    } = this.state;
     const newData = {
-      id: this.props.id,
-      name: this.checkName(this.state.name),
-      start: this.checkStart(this.state.start),
-      end: this.checkEnd(this.state.end),
-      color: this.state.color
+      name: this.checkName(name),
+      start: this.checkStart(start),
+      end: this.checkEnd(end),
+      color
     };
-    this.props.handlerFromParant(newData);;
+    handlerFromParant(newData);
   };
 
-  handleSubmit = e => {
+  handleSubmit = (e) => {
     e.preventDefault();
-
+    const {
+      name, start, end, color 
+    } = this.state;
     this.sendData();
     const project = window.location.hash.substr(10);
     axios
-      .post("http://localhost:5000/api/tasks/add", {
-        idTask: this.props.id,
-        name: this.checkName(this.state.name),
-        start: this.checkStart(this.state.start),
-        end: this.checkEnd(this.state.end),
-        color: this.state.color,
-        user: this.state.user,
+      .post('http://localhost:5000/api/tasks/add', {
+        name: this.checkName(name),
+        start: this.checkStart(start),
+        end: this.checkEnd(end),
+        color,
         project
       })
-      .then(result => {
+      .then((result) => {
         console.log(result);
       });
 
@@ -93,14 +102,16 @@ class NewTask extends Component {
 
   handleReset = () => {
     this.setState({
-      idTask: "",
-      name: "",
-      start: "",
-      end: ""
+      name: '',
+      start: '',
+      end: ''
     });
   };
 
   render() {
+    const {
+      name, start, end, color 
+    } = this.state;
     return (
       <div>
         <Container>
@@ -115,7 +126,7 @@ class NewTask extends Component {
                       id="nameTask"
                       placeholder="Nazwa zadania"
                       onChange={this.handleInputChange}
-                      value={this.state.name}
+                      value={name}
                     />
                   </FormGroup>
                 </Col>
@@ -127,7 +138,7 @@ class NewTask extends Component {
                       id="start"
                       placeholder="Czas rozpoczęcia"
                       onChange={this.handleInputChange}
-                      value={this.state.start}
+                      value={start}
                     />
                   </FormGroup>
                 </Col>
@@ -139,7 +150,7 @@ class NewTask extends Component {
                       id="end"
                       placeholder="Czas zakończenia"
                       onChange={this.handleInputChange}
-                      value={this.state.end}
+                      value={end}
                     />
                   </FormGroup>
                 </Col>
@@ -148,10 +159,10 @@ class NewTask extends Component {
                     <Input
                       type="color"
                       name="color"
-                      id="exampleZip"
+                      id="color"
                       placeholder="green"
                       onChange={this.handleInputChange}
-                      value={this.state.color}
+                      value={color}
                     />
                   </FormGroup>
                 </Col>

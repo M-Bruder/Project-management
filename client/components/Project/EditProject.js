@@ -1,15 +1,25 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import {
-  Button,
-  ButtonGroup,
-  Row,
-  Col
-} from "reactstrap";
-import "../../styles/project.css";
-import MemberList from "../Member/MemberList";
+  Button, ButtonGroup, Row, Col 
+} from 'reactstrap';
+import PropTypes from 'prop-types';
+import '../../styles/project.css';
+import MemberList from '../Member/MemberList';
 
 class Project extends Component {
+  static get propTypes() {
+    return {
+      project: PropTypes.func,
+      onDelete: PropTypes.func.isRequired,
+      onEditProject: PropTypes.func.isRequired
+    };
+  }
+
+  /* static defaultProps = {
+    project: '',
+  }; */
+
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -17,35 +27,36 @@ class Project extends Component {
     this.state = {
       isEditing: false,
       project: this.props.project,
-      title: "",
-      body: "",
-      onDelete: "",
-      user: localStorage.getItem("user")
+      title: '',
+      body: ''
     };
   }
 
-  toggleEdit() {
-    this.setState({ isEditing: !this.state.isEditing });
-  }
-
-  handleInputChange = e => {
+  handleInputChange = (e) => {
     this.setState({
       [e.target.name]: e.target.value
     });
   };
 
-  handleSubmit = e => {
+  handleSubmit = (e) => {
+    const { onEditProject } = this.props;
+    const { title, body, project } = this.state;
     e.preventDefault();
-    if (this.state.title.trim() && this.state.body.trim()) {
-      this.props.onEditProject({
-        id: this.state.project._id,
-        title: this.state.title,
-        body: this.state.body
+    if (title.trim() && body.trim()) {
+      onEditProject({
+        id: project._id,
+        title,
+        body
       });
       this.toggleEdit();
-      location.reload();
+      window.location.reload();
     }
   };
+
+  toggleEdit() {
+    const { isEditing } = this.state;
+    this.setState({ isEditing: !isEditing });
+  }
 
   toggleEditCancel() {
     this.setState({ isEditing: false });
@@ -53,56 +64,58 @@ class Project extends Component {
 
   render() {
     const { onDelete } = this.props;
-    if (this.state.isEditing) {
+    const {
+      body, title, isEditing, project 
+    } = this.state;
+    if (isEditing) {
       return (
         <div className="content">
           <Row>
             <Col>
-                <h4>
-                  <b>{this.state.title}</b>
-                </h4>
-                <p>{this.state.body}</p>
-                <form onSubmit={this.handleSubmit}>
-                  <div className="form-group">
-                    <input
-                      type="text"
-                      placeholder="Nazwa projektu"
-                      className="form-control"
-                      name="title"
-                      onChange={this.handleInputChange}
-                      value={this.state.title || this.state.project.title}
-                      required
-                    />
-                  </div>
-                  <div className="form-group">
-                    <textarea
-                      rows="5"
-                      cols="33"
-                      placeholder="Opis"
-                      className="form-control"
-                      name="body"
-                      onChange={this.handleInputChange}
-                      value={this.state.body || this.state.project.body}
-                      required
-                    />
-                  </div>
-                  <ButtonGroup size="sm" className="optionsProject">
-                    <Button color="primary" type="onSubmit">
-                      Zapisz zmiany
-                    </Button>
-                    <Button
-                      color="info"
-                      onClick={this.toggleEditCancel.bind(this)}
-                    >
-                      Anuluj
-                    </Button>
-                  </ButtonGroup>
-                </form>
-              
+              <h4>
+                <b>{title}</b>
+              </h4>
+              <p>{body}</p>
+              <form onSubmit={this.handleSubmit}>
+                <div className="form-group">
+                  <input
+                    type="text"
+                    placeholder="Nazwa projektu"
+                    className="form-control"
+                    name="title"
+                    onChange={this.handleInputChange}
+                    value={title || project.title}
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <textarea
+                    rows="5"
+                    cols="33"
+                    placeholder="Opis"
+                    className="form-control"
+                    name="body"
+                    onChange={this.handleInputChange}
+                    value={body || project.body}
+                    required
+                  />
+                </div>
+                <ButtonGroup size="sm" className="optionsProject">
+                  <Button color="primary" type="onSubmit">
+                    Zapisz zmiany
+                  </Button>
+                  <Button
+                    color="info"
+                    onClick={this.toggleEditCancel.bind(this)}
+                  >
+                    Anuluj
+                  </Button>
+                </ButtonGroup>
+              </form>
             </Col>
             <Col>
               <div className="members">
-                <MemberList project={this.state.project._id} />
+                <MemberList project={project._id} />
               </div>
             </Col>
           </Row>
@@ -113,32 +126,25 @@ class Project extends Component {
       <div className="content">
         <Row>
           <Col>
-              <h4>
-                <b>{this.state.project.title}</b>
-              </h4>
-              <p>{this.state.project.body}</p>
-              <ButtonGroup size="sm" className="optionsProject">
-                <Button color="primary" onClick={this.toggleEdit}>
-                  Edytuj
-                </Button>
-                <Button
-                  color="info"
-                  tag={Link}
-                  to={`/project/${this.state.project._id}`}
-                >
-                  Szczegóły projektu
-                </Button>
-                <Button
-                  color="danger"
-                  onClick={() => onDelete(this.state.project._id)}
-                >
-                  Usuń
-                </Button>
-              </ButtonGroup>
+            <h4>
+              <b>{project.title}</b>
+            </h4>
+            <p>{project.body}</p>
+            <ButtonGroup size="sm" className="optionsProject">
+              <Button color="primary" onClick={this.toggleEdit}>
+                Edytuj
+              </Button>
+              <Button color="info" tag={Link} to={`/project/${project._id}`}>
+                Szczegóły projektu
+              </Button>
+              <Button color="danger" onClick={() => onDelete(project._id)}>
+                Usuń
+              </Button>
+            </ButtonGroup>
           </Col>
           <Col>
             <div className="members">
-              <MemberList project={this.state.project._id} />
+              <MemberList project={project._id} />
             </div>
           </Col>
         </Row>

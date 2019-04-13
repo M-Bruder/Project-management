@@ -15,7 +15,7 @@ router.post('/add', (req, res) => {
       res.status(200).json(project);
     })
     .catch((err) => {
-      res.status(400).send('Unable to save to database');
+      res.status(400).send(err);
     });
 });
 
@@ -36,7 +36,6 @@ router.put('/update/:id', (req, res) => {
     title: req.body.title,
     body: req.body.body,
   };
-  console.log(doc);
   Project.updateOne({ _id: req.params.id }, { $set: doc }, (err, project) => {
     if (err) {
       res.send(err);
@@ -47,7 +46,7 @@ router.put('/update/:id', (req, res) => {
 });
 
 router.get('/delete/:id', (req, res) => {
-  Project.findByIdAndRemove({ _id: req.params.id }, (err, project) => {
+  Project.findByIdAndRemove({ _id: req.params.id }, (err) => {
     if (err) res.json(err);
     else res.json(req.params.id);
   });

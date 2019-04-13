@@ -1,25 +1,37 @@
-import React from "react";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
-class NewProject extends React.Component {
-  state = {
-    title: "",
-    body: "",
-    user: localStorage.getItem("user")
-  };
+class NewProject extends Component {
+  static get propTypes() {
+    return {
+      onAddProject: PropTypes.func.isRequired
+    };
+  }
 
-  handleInputChange = e => {
+  constructor(props) {
+    super(props);
+    this.state = {
+      title: '',
+      body: '',
+      user: localStorage.getItem('user')
+    };
+  }
+
+  handleInputChange = (e) => {
     this.setState({
       [e.target.name]: e.target.value
     });
   };
 
-  handleSubmit = e => {
+  handleSubmit = (e) => {
+    const { onAddProject } = this.props;
+    const { title, body, user } = this.state;
     e.preventDefault();
-    if (this.state.title.trim() && this.state.body.trim()) {
-      this.props.onAddProject({
-        title: this.state.title,
-        body: this.state.body,
-        user: this.state.user
+    if (title.trim() && body.trim()) {
+      onAddProject({
+        title,
+        body,
+        user
       });
       this.handleReset();
     }
@@ -27,12 +39,13 @@ class NewProject extends React.Component {
 
   handleReset = () => {
     this.setState({
-      title: "",
-      body: ""
+      title: '',
+      body: ''
     });
   };
 
   render() {
+    const { title, body } = this.state;
     return (
       <div>
         <form className="form" onSubmit={this.handleSubmit}>
@@ -43,7 +56,7 @@ class NewProject extends React.Component {
               className="form-control"
               name="title"
               onChange={this.handleInputChange}
-              value={this.state.title}
+              value={title}
               required
             />
           </div>
@@ -55,7 +68,7 @@ class NewProject extends React.Component {
               className="form-control"
               name="body"
               onChange={this.handleInputChange}
-              value={this.state.body}
+              value={body}
               required
             />
           </div>

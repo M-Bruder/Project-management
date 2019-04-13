@@ -5,12 +5,10 @@ const router = express.Router();
 
 router.post('/add', (req, res) => {
   const task = new Task({
-    idTask: req.body.idTask,
     name: req.body.name,
     start: req.body.start,
     end: req.body.end,
     color: req.body.color,
-    user: req.body.user,
     project: req.body.project,
   });
 
@@ -20,7 +18,7 @@ router.post('/add', (req, res) => {
       res.status(200).json(task);
     })
     .catch((err) => {
-      res.status(400).send('unable to save to database');
+      res.status(400).send(err);
     });
 });
 
@@ -39,7 +37,7 @@ router.post('/getTask', (req, res) => {
 router.get('/delete/:id', (req, res) => {
   Task.findByIdAndRemove({ _id: req.params.id }, (err, task) => {
     if (err) res.json(err);
-    else res.json(req.params.id);
+    else res.json(task);
   });
 });
 

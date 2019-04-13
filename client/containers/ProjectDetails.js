@@ -1,6 +1,6 @@
-import React, { Component } from "react";
-import { Row, Col, Container } from "reactstrap";
-import Gantt from "../components/Gantt/Gantt";
+import React, { Component } from 'react';
+import { Row, Col, Container } from 'reactstrap';
+import Gantt from '../components/Gantt/Gantt';
 
 class ProjectDetails extends Component {
   render() {

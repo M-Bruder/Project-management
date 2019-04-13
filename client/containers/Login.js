@@ -1,54 +1,64 @@
-import React, { Component } from "react";
-import axios from "axios";
-import { Link } from "react-router-dom";
-import "../styles/login.css";
+import React, { Component } from 'react';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import '../styles/login.css';
 
 class Login extends Component {
-  constructor() {
-    super();
-    this.state = {
-      username: "",
-      password: "",
-      message: ""
+  static get propTypes() {
+    return {
+      history: PropTypes.object.isRequired
     };
   }
 
-  onChange = e => {
-    const { state } = this;
-    state[e.target.name] = e.target.value;
-    this.setState(state);
-  };
+  constructor() {
+    super();
+    this.state = {
+      username: '',
+      password: '',
+      message: ''
+    };
+  }
 
-  onSubmit = e => {
-    e.preventDefault();
+
+  componentDidMount() {
+    const { history } = this.props;
+    if (localStorage.getItem('user') !== null) {
+      history.push('/');
+    }
+  }
+  
+
+  onSubmit = (e) => {
+    const { history } = this.props;
     const { username, password } = this.state;
-
+    e.preventDefault();
     axios
-      .post("http://localhost:5000/api/auth/login", { username, password })
-      .then(result => {
-        localStorage.setItem("user", result.data.userid);
-        this.setState({ message: "" });
-        this.props.history.push("/project");
+      .post('http://localhost:5000/api/auth/login', { username, password })
+      .then((result) => {
+        localStorage.setItem('user', result.data.userid);
+        this.setState({ message: '' });
+        history.push('/project');
       })
-      .catch(error => {
+      .catch((error) => {
         if (error.response.status === 401) {
-          this.setState({ message: "Błędna nazwa użytkownika lub hasło!" });
+          this.setState({ message: 'Błędna nazwa użytkownika lub hasło!' });
         }
       });
   };
 
-  componentDidMount() {
-    if (localStorage.getItem("user") !== null) {
-      this.props.history.push("/");
-    }
-  }
+  onChange = (e) => {
+    const { state } = this;
+    state[e.target.name] = e.target.value;
+    this.setState(state);
+  };
 
   render() {
     const { username, password, message } = this.state;
     return (
       <div className="container ">
         <div className="signin">
-          {message !== "" && (
+          {message !== '' && (
             <div className="alert alert-danger alert-dismissible" role="alert">
               {message}
             </div>
@@ -79,18 +89,20 @@ class Login extends Component {
             <button className="btn btn-lg btn-primary btn-block" type="submit">
               Zaloguj się
             </button>
-            
-              <p>
-                Nie masz konta?{" "}
-                <Link to="/register">
-                  <span
-                    className="glyphicon glyphicon-plus-sign"
-                    aria-hidden="true"
-                  />{" "}
+
+            <p>
+                Nie masz konta?
+              {' '}
+              <Link to="/register">
+                <span
+                  className="glyphicon glyphicon-plus-sign"
+                  aria-hidden="true"
+                />
+                {' '}
                   Zarejestruj się!
-                </Link>
-              </p>
-            
+              </Link>
+            </p>
+
           </form>
         </div>
       </div>

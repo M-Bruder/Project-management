@@ -1,29 +1,37 @@
-import React, { Component } from "react";
-import axios from "axios";
-import "../styles/login.css";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import axios from 'axios';
+import '../styles/login.css';
 
 class Register extends Component {
-  constructor() {
-    super();
-    this.state = {
-      name: "",
-      surname: "",
-      username: "",
-      email: "",
-      password: "",
-      passwordConfirm: "",
-      message: ""
+  static get propTypes() {
+    return {
+      history: PropTypes.object.isRequired
     };
   }
 
-  onChange = e => {
+  constructor() {
+    super();
+    this.state = {
+      name: '',
+      surname: '',
+      username: '',
+      email: '',
+      password: '',
+      passwordConfirm: '',
+      message: ''
+    };
+  }
+
+  onChange = (e) => {
     const { state } = this;
     state[e.target.name] = e.target.value;
     this.setState(state);
   };
 
-  onSubmit = e => {
+  onSubmit = (e) => {
     e.preventDefault();
+    const { history } = this.props;
     const {
       name,
       surname,
@@ -34,25 +42,25 @@ class Register extends Component {
     } = this.state;
 
     if (password !== passwordConfirm) {
-      this.setState({ message: "Hasła do siebie nie pasują" });
+      this.setState({ message: 'Hasła do siebie nie pasują' });
     } else {
       axios
-        .post("http://localhost:5000/api/auth/register", {
+        .post('http://localhost:5000/api/auth/register', {
           name,
           surname,
           username,
           email,
           password
         })
-        .then(result => {
-          this.setState({ message: "" });
-          this.props.history.push("/");
+        .then(() => {
+          this.setState({ message: '' });
+          history.push('/');
         })
-        .catch(error => {
+        .catch((error) => {
           if (error.response.status === 401) {
             this.setState({
               message:
-                "Nazwa użytkownika lub adres e-mail jest zajęty! Spróbuj ponownie!"
+                'Nazwa użytkownika lub adres e-mail jest zajęty! Spróbuj ponownie!'
             });
           }
         });
@@ -72,7 +80,7 @@ class Register extends Component {
     return (
       <div className="container">
         <div className="signin">
-          {message !== "" && (
+          {message !== '' && (
             <div className="alert alert-danger alert-dismissible" role="alert">
               {message}
             </div>

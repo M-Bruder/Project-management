@@ -1,62 +1,83 @@
-import React, { Component } from "react";
-import { FormGroup, Button, Input, Form, Row, ListGroupItem, ListGroup } from "reactstrap";
-import axios from "axios";
-import "../../styles/memberList.css";
+import React, { Component } from 'react';
+import {
+  FormGroup,
+  Button,
+  Input,
+  Form,
+  Row,
+  ListGroupItem,
+  ListGroup
+} from 'reactstrap';
+import PropTypes from 'prop-types';
+import axios from 'axios';
+import '../../styles/memberList.css';
 
 class AddMemberList extends Component {
+  static get propTypes() {
+    return {
+      project: PropTypes.string,
+    };
+  }
+
+  static defaultProps = {
+    project: '',
+  };
+
+
   constructor(props) {
     super(props);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.onDelete = this.onDelete.bind(this);
+
     this.state = {
       membersData: [],
-      name: "",
-      user: localStorage.getItem("user")
+      name: ''
     };
   }
 
-  handleInputChange = e => {
+  handleInputChange = (e) => {
     this.setState({
       [e.target.name]: e.target.value
     });
   };
 
   componentWillMount = () => {
+    this.setState();
     this.getData();
   };
 
   getData = () => {
     const { project } = this.props;
     axios
-      .post("http://localhost:5000/api/members/getMember", {
+      .post('http://localhost:5000/api/members/getMember', {
         project
       })
-      .then(res => {
+      .then((res) => {
         const membersData = res.data;
         this.setState({ membersData });
       })
-      .catch(error => {
+      .catch((error) => {
         if (error.response.status === 401) {
           console.log(error);
         }
       });
   };
 
-  handleSubmit = e => {
+  handleSubmit = (e) => {
     e.preventDefault();
     const { project } = this.props;
+    const { name, membersData } = this.state;
     axios
-      .post("http://localhost:5000/api/members/addMember", {
-        memberName: this.state.name,
-        user: this.state.user,
+      .post('http://localhost:5000/api/members/addMember', {
+        memberName: name,
         project
       })
-      .then(res => {
+      .then((res) => {
         const { data } = res;
-        this.setState({ membersData: [...this.state.membersData, data] });
+        this.setState({ membersData: [...membersData, data] });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
     this.handleReset();
@@ -64,27 +85,30 @@ class AddMemberList extends Component {
 
   handleReset = () => {
     this.setState({
-      name: ""
+      name: ''
     });
   };
 
-  onDelete = id => {
-    const membersData = this.state.membersData.filter(r => r.id !== id);
+  onDelete = (id) => {
+    let { membersData } = this.state;
+    membersData = membersData.filter(r => r.id !== id);
     axios
       .get(`http://localhost:5000/api/members/delete/${id}`)
-      .then(response => { 
+      .then(() => {
         this.setState({ membersData });
         this.getData();
       })
-      .catch(error => {
+      .catch((error) => {
         throw error;
       });
   };
 
+
   render() {
-    const membersData = this.state.membersData.map(d => (
+    const { membersData, name } = this.state;
+    const members = membersData.map(d => (
       <ListGroupItem key={d._id}>
-        {" "}
+        {' '}
         {d.members}
         <Button
           size="sm"
@@ -93,7 +117,8 @@ class AddMemberList extends Component {
           onClick={this.onDelete.bind(this, d._id)}
         >
           Usuń
-        </Button>{" "}
+        </Button>
+        {' '}
       </ListGroupItem>
     ));
     return (
@@ -103,13 +128,17 @@ class AddMemberList extends Component {
             <b>Lista członków: </b>
           </p>
           <ListGroup>
-            {membersData.length ? (
-              membersData
+            {members.length ? (
+              members
             ) : (
               <p>Nie przydzielono członków do projektu!</p>
             )}
           </ListGroup>
-          <Form bssize="sm" className="form-addMember" onSubmit={this.handleSubmit}>
+          <Form
+            bssize="sm"
+            className="form-addMember"
+            onSubmit={this.handleSubmit}
+          >
             <Row form>
               <FormGroup>
                 <Input
@@ -119,11 +148,14 @@ class AddMemberList extends Component {
                   id="nameTask"
                   placeholder="Nazwa użytkownika"
                   onChange={this.handleInputChange}
-                  value={this.state.name}
+                  value={name}
                 />
               </FormGroup>
               <FormGroup>
-                <button type="submit" className="btn btn-primary btn-sm btn-add">
+                <button
+                  type="submit"
+                  className="btn btn-primary btn-sm btn-add"
+                >
                   Dodaj
                 </button>
               </FormGroup>

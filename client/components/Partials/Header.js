@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Collapse,
   Navbar,
@@ -8,8 +8,8 @@ import {
   NavItem,
   NavLink,
   Container
-} from "reactstrap";
-import { Link } from "react-router-dom";
+} from 'reactstrap';
+import { Link } from 'react-router-dom';
 
 class Header extends React.Component {
   constructor(props) {
@@ -21,25 +21,27 @@ class Header extends React.Component {
     };
   }
 
+  logout = () => {
+    localStorage.removeItem('user');
+  };
+
   toggle() {
+    const { isOpen } = this.state;
     this.setState({
-      isOpen: !this.state.isOpen
+      isOpen: !isOpen
     });
   }
 
-  logout = () => {
-    localStorage.removeItem("user");
-  };
-
   render() {
-    if (localStorage.getItem("user") !== null) {
+    const { isOpen } = this.state;
+    if (localStorage.getItem('user') !== null) {
       return (
         <div>
           <Navbar color="primary" dark expand="md">
             <Container>
               <NavbarBrand href="/">System zarządzania projektami</NavbarBrand>
               <NavbarToggler onClick={this.toggle} />
-              <Collapse isOpen={this.state.isOpen} navbar>
+              <Collapse isOpen={isOpen} navbar>
                 <Nav className="ml-auto" navbar>
                   <NavItem>
                     <NavLink tag={Link} to="/project">
@@ -69,7 +71,7 @@ class Header extends React.Component {
           <Container>
             <NavbarBrand href="/">System zarządzania projektami</NavbarBrand>
             <NavbarToggler onClick={this.toggle} />
-            <Collapse isOpen={this.state.isOpen} navbar>
+            <Collapse isOpen={isOpen} navbar>
               <Nav className="ml-auto" navbar>
                 <NavItem>
                   <NavLink tag={Link} to="/">

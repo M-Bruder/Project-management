@@ -56,12 +56,12 @@ UserSchema.methods.comparePassword = function (passw, cb) {
 const User = mongoose.model('User', UserSchema);
 module.exports = User;
 
-module.exports.getUserByUsernameorEmail = function (username, callback) {
+function getUserByUsernameorEmail(username, callback) {
   const query = username.indexOf('@') === -1 ? { username } : { email: username };
   User.findOne(query, callback);
-};
+}
 
-module.exports.updatePassword = function (password, callback) {
+function updatePassword(password, callback) {
   bcrypt.genSalt(10, (err, salt) => {
     if (err) {
       return callback(err);
@@ -71,11 +71,10 @@ module.exports.updatePassword = function (password, callback) {
         return callback(err);
       }
       password = hash;
-      callback(password);
+      return callback(password);
     });
   });
-};
+}
 
-module.exports.getUserById = function (id, callback) {
-  User.findById(id, callback);
-};
+module.exports.getUserByUsernameorEmail = getUserByUsernameorEmail;
+module.exports.updatePassword = updatePassword;

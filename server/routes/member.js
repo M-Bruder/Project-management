@@ -6,7 +6,6 @@ const router = express.Router();
 router.post('/addMember', (req, res) => {
   const member = new Member({
     members: req.body.memberName,
-    user: req.body.user,
     project: req.body.project
   });
 
@@ -16,7 +15,7 @@ router.post('/addMember', (req, res) => {
       res.status(200).json(member);
     })
     .catch((err) => {
-      res.status(400).send('unable to save to database');
+      res.status(400).send(err);
     });
 });
 
@@ -36,7 +35,7 @@ router.post('/getMember', (req, res) => {
 router.get('/delete/:id', (req, res) => {
   Member.findByIdAndRemove({ _id: req.params.id }, (err, member) => {
     if (err) res.json(err);
-    else res.json(req.params.id);
+    else res.json(member);
   });
 });
 

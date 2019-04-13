@@ -11,8 +11,6 @@ export default function projectReducer(state = [], action) {
       return [...state, action.payload];
     case EDIT_PROJECT:
       return [...state, action.payload];
-    // return state.filter(project => project._id !== action.payload.id);
-    // return state.map((project)=>project._id === action.payload.id ? {...project,editing:!project.editing}:project);
     case DELETE_PROJECT:
       return state.filter(project => project._id !== action.payload.id);
     case FETCH_PROJECT:
