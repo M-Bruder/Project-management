@@ -4,7 +4,7 @@ First App built with MongoDB, Express, React and Node.js (MERN STACK).
 ## How to install/run app?
 1. Clone the repo
 ```
-git clone git@github.com:m-bruder/project-managment.git
+git clone git@github.com:m-bruder/project-management.git
 ```
 2. Install mongodb and run mongo server
 * [MongoDB](https://docs.mongodb.com/manual/installation/)
@@ -57,9 +57,8 @@ It's all connected with database MongoDB.
 
 - [Eslint](https://eslint.org/) - Linting utility for JavaScript and JSX
 
-## Result app
-
-Login            |  Register
+## Result
+Login page         |  Register page
 :-------------------------:|:-------------------------:
 <img src="https://github.com/M-Bruder/Project-management/blob/master/img-readme/login.png" width="450" height="210" alt="login-img"> | <img src="https://github.com/M-Bruder/Project-management/blob/master/img-readme/register.png" width="450" height="210" alt="register-img">
 
